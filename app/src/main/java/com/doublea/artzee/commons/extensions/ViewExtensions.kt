@@ -1,5 +1,7 @@
 package com.doublea.artzee.commons.extensions
 
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -18,4 +20,13 @@ fun ImageView.loadImage(imageUrl: String) {
     } else {
         Picasso.with(context).load(imageUrl).into(this)
     }
+}
+
+fun Fragment.launchFragment(fm: FragmentManager, addToBackStack: Boolean = true, tag: String = "TAG") {
+    val ft = fm.beginTransaction()
+    ft.replace(R.id.fragment_container, this, tag)
+    if (addToBackStack) {
+        ft.addToBackStack(null)
+    }
+    ft.commit()
 }

@@ -1,14 +1,11 @@
 package com.doublea.artzee.commons.data
 
 import com.doublea.artzee.commons.data.models.Art
-import com.doublea.artzee.commons.data.network.ArtRestApi
+import com.doublea.artzee.commons.data.network.ArtsyService
 import io.reactivex.Single
 
-class ArtRepositoryImpl : ArtRepository {
+class ArtRepositoryImpl constructor(private val api: ArtsyService) : ArtRepository {
 
-    private val api = ArtRestApi()
-
-    override fun getArt(startIndex: Int): Single<List<Art>> {
-        return api.getArt().map { it._embedded.artworks.map { Art(it.title) } }
-    }
+    override fun getArt(startIndex: Int): Single<List<Art>> = api.getArt()
+            .map { it._embedded.artworks.map { it.toArt() } }
 }
