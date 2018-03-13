@@ -2,6 +2,7 @@ package com.doublea.artzee.browse.ui
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.arch.paging.PagedList
 import android.content.Context
 import android.support.v4.app.Fragment
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.doublea.artzee.R
+import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.extensions.inflate
 import kotlinx.android.synthetic.main.fragment_browse_art.*
 
@@ -20,7 +22,7 @@ class BrowseArtFragment : Fragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        viewModel = ViewModelProviders.of(activity).get(MainActivityViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -39,12 +41,12 @@ class BrowseArtFragment : Fragment() {
         }
 
         initAdapter()
-        viewModel.art.observe(this, Observer { if (it != null) adapter.dataSource = it })
+        viewModel.artList.observe(this, Observer<PagedList<Art>> { adapter.submitList(it) })
     }
 
     private fun initAdapter() {
         if (artwork_list.adapter == null) {
-            adapter = ArtworkAdapter(this.activity, {}, 2)
+            adapter = ArtworkAdapter(activity, {}, 2)
         }
         artwork_list.adapter = adapter
     }

@@ -1,33 +1,36 @@
 package com.doublea.artzee.browse.ui
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.LiveDataReactiveStreams
 import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v7.app.AppCompatActivity
-import com.doublea.artzee.commons.data.ArtRepository
+import android.arch.paging.LivePagedListBuilder
+import android.arch.paging.PagedList
 import com.doublea.artzee.commons.data.models.Art
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.doublea.artzee.commons.data.network.ArtsyService
+import com.doublea.artzee.commons.data.network.ArtworkDataSourceFactory
+import io.reactivex.disposables.CompositeDisposable
 
 class MainActivityViewModel : ViewModel() {
 
-    lateinit var repository: ArtRepository
+    var artList: LiveData<PagedList<Art>>
 
-    val art: LiveData<List<Art>> by lazy {
-        LiveDataReactiveStreams
-                .fromPublisher<List<Art>>(repository
-                        .getArt()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .toFlowable()) }
+    private val pageSize = 10
 
-    companion object {
-        fun create(activity: AppCompatActivity, repository: ArtRepository): MainActivityViewModel {
-            val viewModel = ViewModelProviders.of(activity).get((MainActivityViewModel::class.java))
-            viewModel.repository = repository
-            return viewModel
-        }
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
+    private val sourceFactory: ArtworkDataSourceFactory
+
+    init {
+        sourceFactory = ArtworkDataSourceFactory(compositeDisposable, ArtsyService.getService())
+        val config = PagedList.Config.Builder()
+                .setPageSize(pageSize)
+                .setInitialLoadSizeHint(pageSize * 3)
+                .setEnablePlaceholders(false)
+                .build()
+        artList = LivePagedListBuilder<String, Art>(sourceFactory, config).build()
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
+    }
 }
