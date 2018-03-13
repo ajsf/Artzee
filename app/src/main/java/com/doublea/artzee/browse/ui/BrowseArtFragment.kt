@@ -11,8 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.doublea.artzee.R
+import com.doublea.artzee.artdetail.ui.ArtDetailFragment
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.extensions.inflate
+import com.doublea.artzee.commons.extensions.launchFragment
 import kotlinx.android.synthetic.main.fragment_browse_art.*
 
 class BrowseArtFragment : Fragment() {
@@ -46,7 +48,15 @@ class BrowseArtFragment : Fragment() {
 
     private fun initAdapter() {
         if (artwork_list.adapter == null) {
-            adapter = ArtworkAdapter(activity, {}, 2)
+            adapter = ArtworkAdapter(activity, { art ->
+                fragmentManager?.let { fm ->
+                    val fragment = ArtDetailFragment()
+                    val bundle = Bundle()
+                    bundle.putParcelable("art", art)
+                    fragment.arguments = bundle
+                    fragment.launchFragment(fm)
+                }
+            }, 2)
         }
         artwork_list.adapter = adapter
     }

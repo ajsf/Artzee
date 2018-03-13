@@ -43,17 +43,17 @@ interface ArtsyService {
             @Query("size") size: Int = 10
     ): Single<ArtsyArtistsWrapper>
 
-    @GET("artists/{id}")
-    fun getArtistById(
-            @Path("id", encoded = true) id: String
-    ): Single<ArtsyArtistResponse>
+    @GET("artists")
+    fun getArtistsByArtworkId(
+            @Query("artwork_id", encoded = true) id: String
+    ): Single<ArtsyArtistsWrapper>
 
     companion object {
         private val apiBaseUrl = "https:/api.artsy.net/api/"
 
         private val retrofit by lazy {
             val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             val authInterceptor = AuthenticationInterceptor()
 
             val client = OkHttpClient.Builder()
