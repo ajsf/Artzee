@@ -1,5 +1,6 @@
 package com.doublea.artzee.artdetail.ui
 
+import android.app.WallpaperManager
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -13,27 +14,56 @@ import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.data.models.Artist
 import com.doublea.artzee.commons.extensions.inflate
 import com.doublea.artzee.commons.extensions.loadImage
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_art_detail.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.support.v4.toast
+import org.jetbrains.anko.uiThread
+import java.io.IOException
 
 class ArtDetailFragment : Fragment() {
 
     private lateinit var viewModel: ArtDetailViewModel
 
+    private lateinit var art: Art
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val art = this.arguments?.getParcelable("art") as Art
+        art = this.arguments?.getParcelable("art") as Art
         viewModel = ArtDetailViewModel.createViewModel(this, art)
+
         return container?.inflate(R.layout.fragment_art_detail)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        btn_set_wallpaper.setOnClickListener { setWallpaper() }
         observeViewModel()
+    }
+
+    private fun setWallpaper() {
+        doAsync {
+            val image = Picasso.with(context)
+                    .load(getImageUrl("larger"))
+                    .get()
+            uiThread {
+                try {
+                    val wallpaperManager = WallpaperManager.getInstance(context)
+                    wallpaperManager.setBitmap(image)
+                    toast("Wallpaper Set")
+                } catch (e: IOException) {
+                    toast("Unable to set wallpaper. Please check internet connection and permissions")
+                }
+            }
+        }
     }
 
     private fun observeViewModel() {
         viewModel.artLiveData.observe(this, Observer<Art> {
-            it?.let { setArtDetails(it) }
+            it?.let {
+                if (it != art) art = it
+                setArtDetails()
+            }
         })
 
         viewModel.artistLiveData.observe(this, Observer<Artist> {
@@ -41,10 +71,9 @@ class ArtDetailFragment : Fragment() {
         })
     }
 
-    private fun setArtDetails(art: Art) {
-        val imageUrl = art.image.replace("{image_version}", "large_rectangle")
+    private fun setArtDetails() {
+        iv_art.loadImage(getImageUrl("large_rectangle"))
         val details = "${art.medium}, ${art.date}"
-        iv_art.loadImage(imageUrl)
         tv_title.text = art.title
         tv_details.text = details
         tv_details2.setTextAndVisibility(
@@ -63,5 +92,8 @@ class ArtDetailFragment : Fragment() {
             visibility = View.VISIBLE
         }
     }
+
+    private fun getImageUrl(imageVersion: String) = art.image.replace("{image_version}", imageVersion)
+
 }
 

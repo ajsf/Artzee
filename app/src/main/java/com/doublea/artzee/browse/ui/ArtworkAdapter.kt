@@ -2,6 +2,7 @@ package com.doublea.artzee.browse.ui
 
 import android.app.Activity
 import android.arch.paging.PagedListAdapter
+import android.support.v4.view.ViewCompat
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.util.DisplayMetrics
@@ -14,7 +15,7 @@ import com.doublea.artzee.commons.extensions.inflate
 import com.doublea.artzee.commons.extensions.loadImage
 import kotlinx.android.synthetic.main.artwork_list_item.view.*
 
-class ArtworkAdapter(activity: Activity?, val clickListener: (Art) -> Unit, columnCount: Int) : PagedListAdapter<Art, RecyclerView.ViewHolder>(ArtDiffCallback) {
+class ArtworkAdapter(activity: Activity?, val clickListener: (Art, View) -> Unit, columnCount: Int) : PagedListAdapter<Art, RecyclerView.ViewHolder>(ArtDiffCallback) {
 
     private var imageSize: Int = 0
 
@@ -51,7 +52,8 @@ class ArtworkAdapter(activity: Activity?, val clickListener: (Art) -> Unit, colu
         fun bind(art: Art?) = with(itemView) {
             art?.let { a ->
                 iv_artwork_list_thumbnail.loadImage(a.thumbnail)
-                setOnClickListener { clickListener(a) }
+                setOnClickListener { clickListener(a, itemView) }
+                ViewCompat.setTransitionName(this, art.id)
             }
         }
     }

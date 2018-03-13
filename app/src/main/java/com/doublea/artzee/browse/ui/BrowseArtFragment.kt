@@ -34,7 +34,6 @@ class BrowseArtFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         artwork_list.apply {
             setHasFixedSize(true)
             val gridLayout = GridLayoutManager(context, 2)
@@ -48,7 +47,7 @@ class BrowseArtFragment : Fragment() {
 
     private fun initAdapter() {
         if (artwork_list.adapter == null) {
-            adapter = ArtworkAdapter(activity, { art ->
+            adapter = ArtworkAdapter(activity, { art, view ->
                 fragmentManager?.let { fm ->
                     val fragment = ArtDetailFragment()
                     val bundle = Bundle()
