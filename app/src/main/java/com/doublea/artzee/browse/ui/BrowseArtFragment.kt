@@ -47,7 +47,7 @@ class BrowseArtFragment : Fragment() {
 
     private fun initAdapter() {
         if (artwork_list.adapter == null) {
-            adapter = ArtworkAdapter(activity, { art, view ->
+            adapter = ArtworkAdapter(activity, { art ->
                 fragmentManager?.let { fm ->
                     val fragment = ArtDetailFragment()
                     val bundle = Bundle()

@@ -15,7 +15,7 @@ import com.doublea.artzee.commons.extensions.inflate
 import com.doublea.artzee.commons.extensions.loadImage
 import kotlinx.android.synthetic.main.artwork_list_item.view.*
 
-class ArtworkAdapter(activity: Activity?, val clickListener: (Art, View) -> Unit, columnCount: Int) : PagedListAdapter<Art, RecyclerView.ViewHolder>(ArtDiffCallback) {
+class ArtworkAdapter(activity: Activity?, val clickListener: (Art) -> Unit, columnCount: Int) : PagedListAdapter<Art, RecyclerView.ViewHolder>(ArtDiffCallback) {
 
     private var imageSize: Int = 0
 
@@ -52,7 +52,7 @@ class ArtworkAdapter(activity: Activity?, val clickListener: (Art, View) -> Unit
         fun bind(art: Art?) = with(itemView) {
             art?.let { a ->
                 iv_artwork_list_thumbnail.loadImage(a.thumbnail)
-                setOnClickListener { clickListener(a, itemView) }
+                setOnClickListener { clickListener(a) }
                 ViewCompat.setTransitionName(this, art.id)
             }
         }
