@@ -17,6 +17,7 @@ data class Art(
         val genes: String,
         val artists: String,
         val similarArtworks: String) : Parcelable {
+
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),
@@ -31,6 +32,8 @@ data class Art(
             parcel.readString(),
             parcel.readString(),
             parcel.readString())
+
+    fun getImageUrl(imageVersion: String) = this.image.replace("{image_version}", imageVersion)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)

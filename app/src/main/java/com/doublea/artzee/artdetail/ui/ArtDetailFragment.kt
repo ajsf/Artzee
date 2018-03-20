@@ -2,6 +2,7 @@ package com.doublea.artzee.artdetail.ui
 
 import android.app.WallpaperManager
 import android.arch.lifecycle.Observer
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 
 import com.doublea.artzee.R
+import com.doublea.artzee.artdetail.utils.setWallpaper
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.data.models.Artist
 import com.doublea.artzee.commons.extensions.inflate
@@ -42,20 +44,8 @@ class ArtDetailFragment : Fragment() {
     }
 
     private fun setWallpaper() {
-        doAsync {
-            val image = Picasso.with(context)
-                    .load(getImageUrl("larger"))
-                    .get()
-            uiThread {
-                try {
-                    val wallpaperManager = WallpaperManager.getInstance(context)
-                    wallpaperManager.setBitmap(image)
-                    toast("Wallpaper Set")
-                } catch (e: IOException) {
-                    toast("Unable to set wallpaper. Please check internet connection and permissions")
-                }
-            }
-        }
+        val imageUrl = art.getImageUrl("larger")
+       setWallpaper(this.context, imageUrl)
     }
 
     private fun observeViewModel() {
@@ -72,7 +62,7 @@ class ArtDetailFragment : Fragment() {
     }
 
     private fun setArtDetails() {
-        iv_art.loadImage(getImageUrl("large_rectangle"))
+        iv_art.loadImage(art.getImageUrl("large_rectangle"))
         val details = "${art.medium}, ${art.date}"
         tv_title.text = art.title
         tv_details.text = details
@@ -92,8 +82,5 @@ class ArtDetailFragment : Fragment() {
             visibility = View.VISIBLE
         }
     }
-
-    private fun getImageUrl(imageVersion: String) = art.image.replace("{image_version}", imageVersion)
-
 }
 
