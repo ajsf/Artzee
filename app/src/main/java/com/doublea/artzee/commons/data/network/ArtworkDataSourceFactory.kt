@@ -7,7 +7,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class ArtworkDataSourceFactory(private val compositeDisposable: CompositeDisposable,
                                private val artsyService: ArtsyService)
-    : DataSource.Factory<String, Art> {
+    : DataSource.Factory<String, Art>() {
 
     val artworkDataSourceLiveData = MutableLiveData<ArtworkDataSource>()
 
