@@ -51,7 +51,7 @@ class ArtworkAdapter(activity: Activity?, val clickListener: (Art) -> Unit, colu
 
         fun bind(art: Art?) = with(itemView) {
             art?.let { a ->
-                iv_artwork_list_thumbnail.loadImage(a.thumbnail)
+                iv_artwork_list_thumbnail.loadImage(a.thumbnail, iv_artwork_progress)
                 setOnClickListener { clickListener(a) }
                 ViewCompat.setTransitionName(this, art.id)
             }

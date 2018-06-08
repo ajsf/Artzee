@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:foreground="?android:selectableItemBackground"
-    android:focusable="true"
+    android:layout_height="wrap_content"
     android:clickable="true"
-    android:layout_height="wrap_content">
+    android:focusable="true"
+    android:foreground="?android:selectableItemBackground">
 
     <ImageView
         android:id="@+id/iv_artwork_list_thumbnail"
@@ -12,5 +12,11 @@
         android:layout_height="0dp"
         android:contentDescription="@string/artwork_list_item_content_description"
         android:scaleType="centerCrop" />
+
+    <ProgressBar
+        android:id="@+id/iv_artwork_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>

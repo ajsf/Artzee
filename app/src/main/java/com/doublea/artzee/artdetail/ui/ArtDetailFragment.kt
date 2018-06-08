@@ -1,27 +1,19 @@
 package com.doublea.artzee.artdetail.ui
 
-import android.app.WallpaperManager
 import android.arch.lifecycle.Observer
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
 import com.doublea.artzee.R
 import com.doublea.artzee.artdetail.utils.setWallpaper
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.data.models.Artist
 import com.doublea.artzee.commons.extensions.inflate
 import com.doublea.artzee.commons.extensions.loadImage
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_art_detail.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.support.v4.toast
-import org.jetbrains.anko.uiThread
-import java.io.IOException
 
 class ArtDetailFragment : Fragment() {
 
@@ -45,7 +37,7 @@ class ArtDetailFragment : Fragment() {
 
     private fun setWallpaper() {
         val imageUrl = art.getImageUrl("larger")
-       setWallpaper(this.context, imageUrl)
+        setWallpaper(this.context, imageUrl)
     }
 
     private fun observeViewModel() {
@@ -62,7 +54,7 @@ class ArtDetailFragment : Fragment() {
     }
 
     private fun setArtDetails() {
-        iv_art.loadImage(art.getImageUrl("large_rectangle"))
+        iv_art.loadImage(art.getImageUrl("large_rectangle"), art_detail_progress)
         val details = "${art.medium}, ${art.date}"
         tv_title.text = art.title
         tv_details.text = details

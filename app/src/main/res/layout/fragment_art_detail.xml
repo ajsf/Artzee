@@ -5,16 +5,30 @@
     android:layout_height="match_parent"
     tools:context="com.doublea.artzee.artdetail.ui.ArtDetailFragment">
 
-    <ImageView
-        android:id="@+id/iv_art"
+    <FrameLayout
+        android:id="@+id/artwork_detail_image_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/artwork"
-        android:scaleType="fitCenter"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:minHeight="200dp">
+
+        <ProgressBar
+            android:id="@+id/art_detail_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="16dp" />
+
+        <ImageView
+            android:id="@+id/iv_art"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/artwork"
+            android:scaleType="fitCenter"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tv_title"
@@ -24,7 +38,7 @@
         android:paddingStart="8dp"
         android:paddingTop="4dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-        app:layout_constraintTop_toBottomOf="@id/iv_art"
+        app:layout_constraintTop_toBottomOf="@id/artwork_detail_image_container"
         tools:text="An Artwork" />
 
     <TextView
