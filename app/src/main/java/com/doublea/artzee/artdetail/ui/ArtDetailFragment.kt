@@ -37,7 +37,13 @@ class ArtDetailFragment : Fragment() {
 
     private fun setWallpaper() {
         val imageUrl = art.getImageUrl("larger")
-        setWallpaper(this.context, imageUrl)
+        btn_set_wallpaper.visibility = View.GONE
+        progress_set_wallpaper.visibility = View.VISIBLE
+        val callback = {
+            progress_set_wallpaper?.visibility = View.GONE
+            btn_set_wallpaper?.visibility = View.VISIBLE
+        }
+        setWallpaper(this.context, imageUrl, callback)
     }
 
     private fun observeViewModel() {
