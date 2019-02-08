@@ -1,4 +1,4 @@
-package com.doublea.artzee.artdetail.ui
+package com.doublea.artzee.artdetail.viewmodel
 
 import android.util.Log
 import androidx.fragment.app.Fragment

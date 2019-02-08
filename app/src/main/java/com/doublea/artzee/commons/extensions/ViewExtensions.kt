@@ -1,13 +1,12 @@
 package com.doublea.artzee.commons.extensions
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
+import androidx.fragment.app.Fragment
 import com.doublea.artzee.R
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -33,7 +32,7 @@ fun ImageView.loadImage(imageUrl: String, progressBar: ProgressBar) {
     }
 }
 
-fun androidx.fragment.app.Fragment.launchFragment(fm: androidx.fragment.app.FragmentManager, addToBackStack: Boolean = true, tag: String = "TAG") {
+fun Fragment.launchFragment(fm: androidx.fragment.app.FragmentManager, addToBackStack: Boolean = true, tag: String = "TAG") {
     val ft = fm.beginTransaction()
     ft.replace(R.id.fragment_container, this, tag)
     if (addToBackStack) {

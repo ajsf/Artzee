@@ -1,4 +1,4 @@
-package com.doublea.artzee.browse.ui
+package com.doublea.artzee.browse.view
 
 import android.content.Context
 import android.os.Bundle
@@ -9,7 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
 import com.doublea.artzee.R
-import com.doublea.artzee.artdetail.ui.ArtDetailFragment
+import com.doublea.artzee.artdetail.view.ArtDetailFragment
+import com.doublea.artzee.browse.viewmodel.MainActivityViewModel
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.extensions.inflate
 import com.doublea.artzee.commons.extensions.launchFragment

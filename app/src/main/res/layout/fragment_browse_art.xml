@@ -4,5 +4,5 @@
     android:id="@+id/artwork_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.doublea.artzee.browse.ui.BrowseArtFragment"
+    tools:context="com.doublea.artzee.browse.view.BrowseArtFragment"
     tools:showIn="@layout/activity_main" />

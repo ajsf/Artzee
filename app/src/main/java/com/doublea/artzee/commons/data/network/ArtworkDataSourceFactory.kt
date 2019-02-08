@@ -9,7 +9,7 @@ class ArtworkDataSourceFactory(private val compositeDisposable: CompositeDisposa
                                private val artsyService: ArtsyService)
     : DataSource.Factory<String, Art>() {
 
-    val artworkDataSourceLiveData = MutableLiveData<ArtworkDataSource>()
+    private val artworkDataSourceLiveData = MutableLiveData<ArtworkDataSource>()
 
     override fun create(): DataSource<String, Art> {
         val artworkDataSource = ArtworkDataSource(artsyService, compositeDisposable)

@@ -1,4 +1,4 @@
-package com.doublea.artzee.artdetail.ui
+package com.doublea.artzee.artdetail.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.doublea.artzee.R
+import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewModel
 import com.doublea.artzee.artdetail.utils.setWallpaper
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.data.models.Artist

@@ -1,4 +1,4 @@
-package com.doublea.artzee.browse.ui
+package com.doublea.artzee.browse.view
 
 import android.app.Activity
 import android.util.DisplayMetrics

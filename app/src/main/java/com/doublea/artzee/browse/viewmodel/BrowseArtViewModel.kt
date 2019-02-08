@@ -1,4 +1,4 @@
-package com.doublea.artzee.browse.ui
+package com.doublea.artzee.browse.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
