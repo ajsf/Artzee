@@ -7,11 +7,14 @@ import androidx.paging.PagedList
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.data.network.ArtsyService
 import com.doublea.artzee.commons.data.network.ArtworkDataSourceFactory
+import com.doublea.artzee.commons.navigator.Navigator
 import io.reactivex.disposables.CompositeDisposable
 
 class MainActivityViewModel : ViewModel() {
 
     var artList: LiveData<PagedList<Art>>
+
+    lateinit var navigator: Navigator
 
     private val pageSize = 10
 
@@ -33,4 +36,6 @@ class MainActivityViewModel : ViewModel() {
         super.onCleared()
         compositeDisposable.dispose()
     }
+
+    fun selectArtItem(art: Art) = navigator.viewArtDetail(art)
 }

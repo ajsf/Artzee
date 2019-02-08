@@ -1,5 +1,6 @@
 package com.doublea.artzee.commons.data.models
 
+import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 
@@ -65,3 +66,8 @@ data class Art(
         }
     }
 }
+
+fun Art.toBundle(): Bundle = Bundle().also {
+    it.putParcelable("art", this)
+}
+
