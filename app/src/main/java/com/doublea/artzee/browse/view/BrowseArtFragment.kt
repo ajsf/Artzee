@@ -2,37 +2,31 @@ package com.doublea.artzee.browse.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import com.doublea.artzee.R
-import com.doublea.artzee.browse.viewmodel.MainActivityViewModel
+import com.doublea.artzee.browse.viewmodel.BrowseArtViewModel
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.extensions.inflate
 import com.doublea.artzee.commons.navigator.NavigatorImpl
 import kotlinx.android.synthetic.main.fragment_browse_art.*
 
-class BrowseArtFragment : androidx.fragment.app.Fragment() {
+class BrowseArtFragment : Fragment() {
 
-    private lateinit var viewModel: MainActivityViewModel
+    private lateinit var viewModel: BrowseArtViewModel
     private lateinit var adapter: ArtworkAdapter
-
-    private val artListObserver = Observer<PagedList<Art>> { adapter.submitList(it) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        Log.d("Browse", "onAttach")
         initViewModel()
-    }
-
-    private fun initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
-        fragmentManager?.let {
-            viewModel.navigator = NavigatorImpl(it)
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +38,13 @@ class BrowseArtFragment : androidx.fragment.app.Fragment() {
         super.onActivityCreated(savedInstanceState)
         initRecyclerView()
         initAdapter()
+    }
+
+    private fun initViewModel() {
+        viewModel = ViewModelProviders.of(this).get(BrowseArtViewModel::class.java)
+        fragmentManager?.let {
+            viewModel.navigator = NavigatorImpl(it)
+        }
     }
 
     private fun initRecyclerView() = artwork_list.apply {
@@ -60,6 +61,6 @@ class BrowseArtFragment : androidx.fragment.app.Fragment() {
             })
         }
         artwork_list.adapter = adapter
-        viewModel.artList.observe(this, artListObserver)
+        viewModel.artList.observe(this, Observer<PagedList<Art>> { adapter.submitList(it) })
     }
 }

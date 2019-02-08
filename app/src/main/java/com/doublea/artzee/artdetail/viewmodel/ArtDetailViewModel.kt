@@ -8,30 +8,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.data.models.Artist
-import com.doublea.artzee.commons.data.network.ArtsyService
-import com.doublea.artzee.commons.data.toArtist
+import com.doublea.artzee.commons.repository.ArtRepositoryImpl
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 
 class ArtDetailViewModel : ViewModel() {
 
     val artLiveData: MutableLiveData<Art> = MutableLiveData()
     val artistLiveData: MediatorLiveData<Artist> = MediatorLiveData()
-    private val artsyService = ArtsyService.getService()
+
+    private val repository = ArtRepositoryImpl()
 
     init {
-        artistLiveData.addSource(artLiveData) {
-            it?.let {
-                artsyService.getArtistsByArtworkId(it.id)
-                        .map {
-                            it._embedded.artists.map { it.toArtist() }
-                        }
-                        .subscribeOn(Schedulers.io())
+        artistLiveData.addSource(artLiveData) { artEvent ->
+            artEvent?.let { art ->
+                repository
+                        .getArtistForArtwork(art.id)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeBy(
                                 { Log.e("ERROR", it.message) },
-                                { artistLiveData.value = it.getOrNull(0) }
+                                { artistLiveData.value = it }
                         )
             }
         }
