@@ -1,12 +1,11 @@
 package com.doublea.artzee
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.doublea.artzee.browse.ui.BrowseArtFragment
 import com.doublea.artzee.commons.extensions.launchFragment
-
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

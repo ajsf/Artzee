@@ -1,7 +1,7 @@
 package com.doublea.artzee.commons.data.network
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.paging.DataSource
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
 import com.doublea.artzee.commons.data.models.Art
 import io.reactivex.disposables.CompositeDisposable
 

@@ -1,6 +1,6 @@
 package com.doublea.artzee.commons.data.network
 
-import android.arch.paging.PageKeyedDataSource
+import androidx.paging.PageKeyedDataSource
 import android.util.Log
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.data.toArt

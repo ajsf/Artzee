@@ -1,14 +1,14 @@
 package com.doublea.artzee.browse.ui
 
 import android.app.Activity
-import android.arch.paging.PagedListAdapter
-import android.support.v4.view.ViewCompat
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import androidx.core.view.ViewCompat
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.doublea.artzee.R
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.extensions.inflate
@@ -37,8 +37,8 @@ class ArtworkAdapter(activity: Activity?, val clickListener: (Art) -> Unit, colu
 
     companion object {
         val ArtDiffCallback = object : DiffUtil.ItemCallback<Art>() {
-            override fun areItemsTheSame(oldItem: Art?, newItem: Art?) = oldItem?.id == newItem?.id
-            override fun areContentsTheSame(oldItem: Art?, newItem: Art?) = oldItem == newItem
+            override fun areItemsTheSame(oldItem: Art, newItem: Art) = oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: Art, newItem: Art) = oldItem == newItem
         }
     }
 

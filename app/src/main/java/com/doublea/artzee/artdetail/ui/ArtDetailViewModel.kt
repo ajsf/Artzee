@@ -1,11 +1,11 @@
 package com.doublea.artzee.artdetail.ui
 
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.app.Fragment
 import android.util.Log
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.data.models.Artist
 import com.doublea.artzee.commons.data.network.ArtsyService

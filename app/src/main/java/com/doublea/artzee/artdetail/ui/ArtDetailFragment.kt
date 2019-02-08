@@ -1,12 +1,11 @@
 package com.doublea.artzee.artdetail.ui
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import com.doublea.artzee.R
 import com.doublea.artzee.artdetail.utils.setWallpaper
 import com.doublea.artzee.commons.data.models.Art
@@ -15,7 +14,7 @@ import com.doublea.artzee.commons.extensions.inflate
 import com.doublea.artzee.commons.extensions.loadImage
 import kotlinx.android.synthetic.main.fragment_art_detail.*
 
-class ArtDetailFragment : Fragment() {
+class ArtDetailFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var viewModel: ArtDetailViewModel
 

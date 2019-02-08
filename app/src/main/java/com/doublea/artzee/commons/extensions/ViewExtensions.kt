@@ -1,7 +1,7 @@
 package com.doublea.artzee.commons.extensions
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -33,7 +33,7 @@ fun ImageView.loadImage(imageUrl: String, progressBar: ProgressBar) {
     }
 }
 
-fun Fragment.launchFragment(fm: FragmentManager, addToBackStack: Boolean = true, tag: String = "TAG") {
+fun androidx.fragment.app.Fragment.launchFragment(fm: androidx.fragment.app.FragmentManager, addToBackStack: Boolean = true, tag: String = "TAG") {
     val ft = fm.beginTransaction()
     ft.replace(R.id.fragment_container, this, tag)
     if (addToBackStack) {

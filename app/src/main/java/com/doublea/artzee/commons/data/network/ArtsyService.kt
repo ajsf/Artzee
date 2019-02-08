@@ -8,7 +8,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
@@ -49,7 +48,7 @@ interface ArtsyService {
     ): Single<ArtsyArtistsWrapper>
 
     companion object {
-        private val apiBaseUrl = "https:/api.artsy.net/api/"
+        private const val apiBaseUrl = "https:/api.artsy.net/api/"
 
         private val retrofit by lazy {
             val loggingInterceptor = HttpLoggingInterceptor()
