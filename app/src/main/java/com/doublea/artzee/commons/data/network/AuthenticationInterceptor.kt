@@ -25,7 +25,12 @@ class AuthenticationInterceptor : Interceptor, Authenticator {
 
     private fun getAuthToken() {
         service.getToken(BuildConfig.ARTSY_CLIENT_ID, BuildConfig.ARTSY_CLIENT_SECRET)
-                .subscribeBy { authToken = it.token }
+                .subscribeBy(
+                        onError = { println("ERROR GETTING AUTH TOKEN") },
+                        onSuccess = {
+                            authToken = it.token
+                        }
+                )
     }
 
     private fun Request.replaceAuthHeader() = this

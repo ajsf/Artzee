@@ -4,16 +4,19 @@ import androidx.paging.PageKeyedDataSource
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.data.toArt
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.subscribeBy
 
 class ArtworkDataSource(
         private val artsyService: ArtsyService,
         private val compositeDisposable: CompositeDisposable) : PageKeyedDataSource<String, Art>() {
 
     override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<String, Art>) {
-        compositeDisposable.add(artsyService.getArt().subscribe { response ->
-            val (artList, cursor) = extractResponseData(response)
-            callback.onResult(artList, "", cursor)
-        })
+        compositeDisposable.add(artsyService.getArt().subscribeBy(
+                onError = { println("ERROR GETTING ART") },
+                onSuccess = { response ->
+                    val (artList, cursor) = extractResponseData(response)
+                    callback.onResult(artList, "", cursor)
+                }))
     }
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Art>) {
