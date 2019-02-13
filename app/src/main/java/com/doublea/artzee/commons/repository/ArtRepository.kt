@@ -1,25 +1,24 @@
 package com.doublea.artzee.commons.repository
 
-import androidx.lifecycle.LiveData
-import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import androidx.paging.RxPagedListBuilder
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.data.models.Artist
 import com.doublea.artzee.commons.data.network.ArtsyService
 import com.doublea.artzee.commons.data.network.ArtworkDataSourceFactory
 import com.doublea.artzee.commons.data.toArtist
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 interface ArtRepository {
     fun getArtistForArtwork(artworkId: String): Single<Artist>
-    fun getArtFeed(): LiveData<PagedList<Art>>
+    fun getArtFeed(disposable: CompositeDisposable): Flowable<PagedList<Art>>
 }
 
-class ArtRepositoryImpl : ArtRepository {
-
-    private val artsyService = ArtsyService.getService()
+class ArtRepositoryImpl(private val artsyService: ArtsyService = ArtsyService.getService()) : ArtRepository {
 
     private val pageSize = 10
 
@@ -29,13 +28,16 @@ class ArtRepositoryImpl : ArtRepository {
             .map { it.first() }
             .subscribeOn(Schedulers.io())
 
-    override fun getArtFeed(): LiveData<PagedList<Art>> {
-        val sourceFactory = ArtworkDataSourceFactory(CompositeDisposable(), artsyService)
+    override fun getArtFeed(disposable: CompositeDisposable): Flowable<PagedList<Art>> {
+        val sourceFactory = ArtworkDataSourceFactory(disposable, artsyService)
+
         val config = PagedList.Config.Builder()
                 .setPageSize(pageSize)
                 .setInitialLoadSizeHint(pageSize * 3)
                 .setEnablePlaceholders(false)
                 .build()
-        return LivePagedListBuilder<String, Art>(sourceFactory, config).build()
+
+        return RxPagedListBuilder<String, Art>(sourceFactory, config)
+                .buildFlowable(BackpressureStrategy.DROP)
     }
 }
