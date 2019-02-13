@@ -12,7 +12,7 @@ class ArtworkDataSource(
 
     override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<String, Art>) {
         compositeDisposable.add(artsyService.getArt().subscribeBy(
-                onError = { println("ERROR GETTING ART") },
+                onError = { e -> onNetworkError(e) },
                 onSuccess = { response ->
                     val (artList, cursor) = extractResponseData(response)
                     callback.onResult(artList, "", cursor)
@@ -20,13 +20,20 @@ class ArtworkDataSource(
     }
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Art>) {
-        compositeDisposable.add(artsyService.getArtByCursor(params.key).subscribe { response ->
-            val (artList, cursor) = extractResponseData(response)
-            callback.onResult(artList, cursor)
-        })
+        compositeDisposable.add(artsyService.getArtByCursor(params.key).subscribeBy(
+                onError = { e -> onNetworkError(e) },
+                onSuccess = { response ->
+                    val (artList, cursor) = extractResponseData(response)
+                    callback.onResult(artList, cursor)
+                }))
     }
 
     override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, Art>) {}
+
+    private fun onNetworkError(e: Throwable) {
+        println("ERROR GETTING ART")
+        e.printStackTrace()
+    }
 
     private fun extractResponseData(response: ArtsyArtworkWrapper): Pair<List<Art>, String> {
         val artList = response._embedded.artworks.map {
