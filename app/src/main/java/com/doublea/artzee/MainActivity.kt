@@ -27,6 +27,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_settings -> true
+        android.R.id.home -> with(supportFragmentManager) {
+            if (backStackEntryCount > 0) popBackStack()
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 

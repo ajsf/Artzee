@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.doublea.artzee.R
@@ -26,7 +27,6 @@ class ArtDetailFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         art = this.arguments?.getParcelable("art") as Art
         viewModel = ArtDetailViewModel.createViewModel(this, art)
-
         return container?.inflate(R.layout.fragment_art_detail)
     }
 
@@ -34,6 +34,7 @@ class ArtDetailFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         btn_set_wallpaper.setOnClickListener { setWallpaper() }
         observeViewModel()
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setWallpaper() {
