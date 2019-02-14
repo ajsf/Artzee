@@ -19,11 +19,11 @@ class ArtsyToArtistMapper : Mapper<ArtsyArtistsWrapper, Artist> {
             this.hometown,
             this.nationality,
             this.image_versions,
-            this._links.thumbnail.href,
-            this._links.image.href,
-            this._links.artworks.href,
-            this._links.similar_artists.href,
-            this._links.similar_contemporary_artists.href,
-            this._links.genes.href
+            this._links?.thumbnail?.href,
+            this._links?.image?.href,
+            this._links?.artworks?.href,
+            this._links?.similar_artists?.href,
+            this._links?.similar_contemporary_artists?.href,
+            this._links?.genes?.href
     )
 }

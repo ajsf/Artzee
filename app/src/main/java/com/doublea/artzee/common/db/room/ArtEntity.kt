@@ -15,9 +15,9 @@ data class ArtEntity(
         val image_versions: List<String>,
         val thumbnail: String,
         val image: String,
-        val partner: String,
-        val genes: String,
-        val artists: String,
-        val similarArtworks: String)
+        val partner: String?,
+        val genes: String?,
+        val artists: String?,
+        val similarArtworks: String?)
 
 

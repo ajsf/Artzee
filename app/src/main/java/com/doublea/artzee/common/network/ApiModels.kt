@@ -24,7 +24,7 @@ data class ArtsyArtworkResponse(
         val date: String?,
         val collecting_institution: String,
         val image_versions: List<String>,
-        val _links: ArtsyArtworkLinks
+        val _links: ArtsyArtworkLinks? = null
 )
 
 data class ArtsyArtworkLinks(
@@ -44,7 +44,7 @@ data class ArtsyArtistResponse(
         val hometown: String,
         val nationality: String,
         val image_versions: List<String>,
-        val _links: ArtsyArtistLinks
+        val _links: ArtsyArtistLinks? = null
 )
 
 data class ArtsyArtistLinks(

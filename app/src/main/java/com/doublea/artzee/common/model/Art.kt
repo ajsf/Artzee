@@ -14,10 +14,10 @@ data class Art(
         val image_versions: List<String>,
         val thumbnail: String,
         val image: String,
-        val partner: String,
-        val genes: String,
-        val artists: String,
-        val similarArtworks: String) : Parcelable {
+        val partner: String?,
+        val genes: String?,
+        val artists: String?,
+        val similarArtworks: String?) : Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),
