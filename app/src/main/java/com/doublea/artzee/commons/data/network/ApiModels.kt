@@ -20,8 +20,8 @@ data class ArtsyArtworkResponse(
         val id: String,
         val title: String,
         val category: String,
-        val medium: String,
-        val date: String,
+        val medium: String?,
+        val date: String?,
         val collecting_institution: String,
         val image_versions: List<String>,
         val _links: ArtsyArtworkLinks

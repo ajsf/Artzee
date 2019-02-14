@@ -3,13 +3,14 @@ package com.doublea.artzee.commons.data.models
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
+import com.doublea.artzee.commons.db.room.ArtEntity
 
 data class Art(
         val id: String,
         val title: String,
         val category: String,
-        val medium: String,
-        val date: String,
+        val medium: String?,
+        val date: String?,
         val collectingInstitution: String,
         val image_versions: List<String>,
         val thumbnail: String,
@@ -66,6 +67,14 @@ data class Art(
         }
     }
 }
+
+fun ArtEntity.toArt() = Art(
+        id, title, category, medium, date, collectingInstitution, image_versions, thumbnail, image, partner, genes, artists, similarArtworks
+)
+
+fun Art.toArtEntity() = ArtEntity(
+        id, title, category, medium, date, collectingInstitution, image_versions, thumbnail, image, partner, genes, artists, similarArtworks
+)
 
 fun Art.toBundle(): Bundle = Bundle().also {
     it.putParcelable("art", this)
