@@ -1,7 +1,7 @@
 package com.doublea.artzee
 
 import android.app.Application
-import com.doublea.artzee.commons.di.appModule
+import com.doublea.artzee.common.di.appModule
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 

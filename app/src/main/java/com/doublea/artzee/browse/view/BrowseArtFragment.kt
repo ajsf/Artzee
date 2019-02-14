@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.doublea.artzee.R
 import com.doublea.artzee.browse.di.browseArtModule
 import com.doublea.artzee.browse.viewmodel.BrowseArtViewModel
-import com.doublea.artzee.commons.data.models.Art
-import com.doublea.artzee.commons.extensions.buildViewModel
-import com.doublea.artzee.commons.extensions.inflate
-import com.doublea.artzee.commons.navigator.NavigatorImpl
+import com.doublea.artzee.common.model.Art
+import com.doublea.artzee.common.extensions.buildViewModel
+import com.doublea.artzee.common.extensions.inflate
+import com.doublea.artzee.common.navigator.NavigatorImpl
 import kotlinx.android.synthetic.main.fragment_browse_art.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware

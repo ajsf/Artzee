@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.doublea.artzee.commons.data.models.Art
-import com.doublea.artzee.commons.data.models.Artist
-import com.doublea.artzee.commons.repository.ArtRepository
+import com.doublea.artzee.common.model.Art
+import com.doublea.artzee.common.model.Artist
+import com.doublea.artzee.common.data.ArtRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 

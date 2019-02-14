@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.toLiveData
 import androidx.paging.PagedList
-import com.doublea.artzee.commons.data.models.Art
-import com.doublea.artzee.commons.navigator.Navigator
-import com.doublea.artzee.commons.repository.ArtRepository
+import com.doublea.artzee.common.model.Art
+import com.doublea.artzee.common.navigator.Navigator
+import com.doublea.artzee.common.data.ArtRepository
 import io.reactivex.disposables.CompositeDisposable
 
 class BrowseArtViewModel(repository: ArtRepository) : ViewModel() {

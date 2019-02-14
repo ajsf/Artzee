@@ -10,9 +10,9 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.doublea.artzee.R
-import com.doublea.artzee.commons.data.models.Art
-import com.doublea.artzee.commons.extensions.inflate
-import com.doublea.artzee.commons.extensions.loadImage
+import com.doublea.artzee.common.model.Art
+import com.doublea.artzee.common.extensions.inflate
+import com.doublea.artzee.common.extensions.loadImage
 import kotlinx.android.synthetic.main.artwork_list_item.view.*
 
 class ArtworkAdapter(activity: Activity?, val clickListener: (Art) -> Unit, columnCount: Int = 2) : PagedListAdapter<Art, RecyclerView.ViewHolder>(ArtDiffCallback) {

@@ -12,11 +12,11 @@ import com.doublea.artzee.R
 import com.doublea.artzee.artdetail.di.artDetailModule
 import com.doublea.artzee.artdetail.utils.setWallpaper
 import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewModel
-import com.doublea.artzee.commons.data.models.Art
-import com.doublea.artzee.commons.data.models.Artist
-import com.doublea.artzee.commons.extensions.buildViewModel
-import com.doublea.artzee.commons.extensions.inflate
-import com.doublea.artzee.commons.extensions.loadImage
+import com.doublea.artzee.common.model.Art
+import com.doublea.artzee.common.model.Artist
+import com.doublea.artzee.common.extensions.buildViewModel
+import com.doublea.artzee.common.extensions.inflate
+import com.doublea.artzee.common.extensions.loadImage
 import kotlinx.android.synthetic.main.fragment_art_detail.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware

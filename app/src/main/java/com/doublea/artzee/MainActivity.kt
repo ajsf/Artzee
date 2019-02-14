@@ -5,7 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.doublea.artzee.browse.view.BrowseArtFragment
-import com.doublea.artzee.commons.extensions.launchFragment
+import com.doublea.artzee.common.extensions.launchFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
