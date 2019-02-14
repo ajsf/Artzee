@@ -1,16 +1,17 @@
 package com.doublea.artzee.artdetail.viewmodel
 
 import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.data.models.Artist
 import com.doublea.artzee.commons.repository.ArtRepository
-import com.doublea.artzee.commons.repository.ArtRepositoryImpl
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 
-class ArtDetailViewModel(private val repository: ArtRepository = ArtRepositoryImpl()) : ViewModel() {
+class ArtDetailViewModel(private val repository: ArtRepository) : ViewModel() {
 
     val artLiveData: LiveData<Art>
         get() = _artLiveData
@@ -38,13 +39,5 @@ class ArtDetailViewModel(private val repository: ArtRepository = ArtRepositoryIm
 
     fun selectArt(art: Art) {
         _artLiveData.value = art
-    }
-
-    companion object {
-        fun createViewModel(fragment: Fragment, art: Art): ArtDetailViewModel {
-            val viewModel = ViewModelProviders.of(fragment).get(ArtDetailViewModel::class.java)
-            viewModel.selectArt(art)
-            return viewModel
-        }
     }
 }

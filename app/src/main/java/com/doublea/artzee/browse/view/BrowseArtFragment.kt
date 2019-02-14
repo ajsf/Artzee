@@ -9,19 +9,31 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import com.doublea.artzee.R
+import com.doublea.artzee.browse.di.browseArtModule
 import com.doublea.artzee.browse.viewmodel.BrowseArtViewModel
 import com.doublea.artzee.commons.data.models.Art
+import com.doublea.artzee.commons.extensions.buildViewModel
 import com.doublea.artzee.commons.extensions.inflate
 import com.doublea.artzee.commons.navigator.NavigatorImpl
 import kotlinx.android.synthetic.main.fragment_browse_art.*
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
 
-class BrowseArtFragment : Fragment() {
+class BrowseArtFragment : Fragment(), KodeinAware {
 
-    private lateinit var viewModel: BrowseArtViewModel
+    private val _parentKodein: Kodein by closestKodein()
+
+    override val kodein = Kodein.lazy {
+        extend(_parentKodein)
+        import(browseArtModule())
+    }
+
+    private val viewModel: BrowseArtViewModel by buildViewModel()
+
     private lateinit var adapter: ArtworkAdapter
 
     override fun onAttach(context: Context) {
@@ -43,7 +55,6 @@ class BrowseArtFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(BrowseArtViewModel::class.java)
         fragmentManager?.let {
             viewModel.navigator = NavigatorImpl(it)
         }

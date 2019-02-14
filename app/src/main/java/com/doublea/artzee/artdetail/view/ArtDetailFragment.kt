@@ -9,24 +9,36 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.doublea.artzee.R
+import com.doublea.artzee.artdetail.di.artDetailModule
 import com.doublea.artzee.artdetail.utils.setWallpaper
 import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewModel
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.data.models.Artist
+import com.doublea.artzee.commons.extensions.buildViewModel
 import com.doublea.artzee.commons.extensions.inflate
 import com.doublea.artzee.commons.extensions.loadImage
 import kotlinx.android.synthetic.main.fragment_art_detail.*
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
 
-class ArtDetailFragment : Fragment() {
+class ArtDetailFragment : Fragment(), KodeinAware {
 
-    private lateinit var viewModel: ArtDetailViewModel
+    private val _parentKodein: Kodein by closestKodein()
+
+    override val kodein = Kodein.lazy {
+        extend(_parentKodein)
+        import(artDetailModule())
+    }
+
+    private val viewModel: ArtDetailViewModel by buildViewModel()
 
     private lateinit var art: Art
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         art = this.arguments?.getParcelable("art") as Art
-        viewModel = ArtDetailViewModel.createViewModel(this, art)
+        viewModel.selectArt(art)
         return container?.inflate(R.layout.fragment_art_detail)
     }
 

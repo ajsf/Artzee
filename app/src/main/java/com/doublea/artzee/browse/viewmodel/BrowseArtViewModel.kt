@@ -7,10 +7,9 @@ import androidx.paging.PagedList
 import com.doublea.artzee.commons.data.models.Art
 import com.doublea.artzee.commons.navigator.Navigator
 import com.doublea.artzee.commons.repository.ArtRepository
-import com.doublea.artzee.commons.repository.ArtRepositoryImpl
 import io.reactivex.disposables.CompositeDisposable
 
-class BrowseArtViewModel(repository: ArtRepository = ArtRepositoryImpl()) : ViewModel() {
+class BrowseArtViewModel(repository: ArtRepository) : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
