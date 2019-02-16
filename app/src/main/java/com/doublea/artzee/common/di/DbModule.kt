@@ -12,12 +12,9 @@ import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
 import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 
 fun dbModule() = Kodein.Module("dbModule") {
     bind<Mapper<ArtEntity, Art>>() with provider { ArtEntityToArtMapper() }
-    bind<Executor>() with provider { Executors.newSingleThreadExecutor() }
-    bind<ArtsyCache>() with singleton { ArtsyCache(instance(), instance(), instance()) }
+    bind<ArtsyCache>() with singleton { ArtsyCache(instance(), instance()) }
     bind<ArtDao>() with provider { ArtDatabase.getInstance(instance()).artDao() }
 }
