@@ -24,7 +24,7 @@ object ArtsyApiDataFactory {
             TestDataFactory.randomList(this::randomArtworkResponse)
     )
 
-    private fun randomArtworkResponse() = ArtsyArtworkResponse(
+    fun randomArtworkResponse() = ArtsyArtworkResponse(
             TestDataFactory.randomString(),
             TestDataFactory.randomString(),
             TestDataFactory.randomString(),

@@ -7,16 +7,7 @@ data class Art(
     val medium: String?,
     val date: String?,
     val collectingInstitution: String,
-    val image_versions: List<String>,
     val thumbnail: String,
     val image: String,
-    val partner: String?,
-    val genes: String?,
-    val artists: String?,
-    val similarArtworks: String?
-) {
-
-    fun getImageUrl(imageVersion: String) = this
-        .image
-        .replace("{image_version}", imageVersion)
-}
+    val imageRectangle: String
+)

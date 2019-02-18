@@ -25,15 +25,17 @@ class BrowseArtFragment : Fragment(), KodeinAware {
 
     override val kodein = Kodein.lazy {
         extend(_parentKodein)
-        import(browseArtModule(this@BrowseArtFragment))
+        import(browseArtModule())
     }
 
     private val viewModel: BrowseArtViewModel by buildViewModel()
 
     private lateinit var adapter: ArtworkAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return container?.inflate(R.layout.fragment_browse_art)
     }
 
@@ -54,10 +56,12 @@ class BrowseArtFragment : Fragment(), KodeinAware {
     private fun initAdapter() {
         if (artwork_list.adapter == null) {
             adapter = ArtworkAdapter(activity, { art ->
-                viewModel.selectArtItem(art)
+                viewModel.selectArtItem(art.id)
             })
         }
         artwork_list.adapter = adapter
-        viewModel.artList.observe(this, Observer<ArtPagedList> { adapter.submitList(it.list) })
+
+        viewModel.artList.observe(this,
+            Observer<ArtPagedList> { adapter.submitList(it.list) })
     }
 }

@@ -10,7 +10,7 @@ fun appModule(appContext: Context) = Kodein.Module("appModule") {
     bind<Context>() with provider { appContext }
     bind<SharedPreferences>() with provider {
         appContext
-                .getSharedPreferences(appContext.packageName, Context.MODE_PRIVATE)
+            .getSharedPreferences(appContext.packageName, Context.MODE_PRIVATE)
     }
     import(dataModule())
 }

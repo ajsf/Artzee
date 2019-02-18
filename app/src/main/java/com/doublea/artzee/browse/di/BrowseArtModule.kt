@@ -1,7 +1,6 @@
 package com.doublea.artzee.browse.di
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.doublea.artzee.browse.viewmodel.BrowseArtViewModel
@@ -14,11 +13,10 @@ import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
 import org.kodein.di.generic.provider
 
-fun browseArtModule(fragment: Fragment) = Kodein.Module("browseArtModule") {
+fun browseArtModule() = Kodein.Module("browseArtModule") {
     bind<ViewModel>(tag = BrowseArtViewModel::class.java.simpleName) with provider {
         BrowseArtViewModel(instance(), instance())
     }
-    bind<FragmentManager>() with provider { fragment.fragmentManager!! }
-    bind<Navigator>() with provider { NavigatorImpl(instance()) }
+    bind<Navigator>() with provider { NavigatorImpl() }
     bind<ViewModelProvider.Factory>() with provider { ViewModelFactory(kodein.direct) }
 }

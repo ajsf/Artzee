@@ -1,11 +1,14 @@
 package com.doublea.artzee.common.data
 
 import com.doublea.artzee.common.db.ArtsyCache
+import com.doublea.artzee.common.db.room.ArtEntity
+import com.doublea.artzee.common.mapper.Mapper
 import com.doublea.artzee.common.network.ArtApi
 import com.doublea.artzee.common.network.ArtApiResponse
 import com.doublea.artzee.test.data.ArtDataFactory
 import com.doublea.artzee.test.data.TestDataFactory
 import com.doublea.artzee.test.data.TestDataFactory.randomInt
+import com.doublea.artzee.test.data.TestDataFactory.randomList
 import com.nhaarman.mockitokotlin2.*
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -29,6 +32,9 @@ class ArtBoundaryCallbackTest {
     @Mock
     lateinit var mockPrefs: PreferencesHelper
 
+    @Mock
+    lateinit var mockMapper: Mapper<ArtApiResponse, List<ArtEntity>>
+
     private lateinit var artBoundaryCallback: ArtBoundaryCallback
 
     private lateinit var disposable: CompositeDisposable
@@ -42,7 +48,7 @@ class ArtBoundaryCallbackTest {
 
         disposable = CompositeDisposable()
         scheduler = TestScheduler()
-        artBoundaryCallback = ArtBoundaryCallback(mockApi, mockPrefs, scheduler)
+        artBoundaryCallback = ArtBoundaryCallback(mockApi, mockPrefs, mockMapper, scheduler)
         artBoundaryCallback.compositeDisposable = disposable
         artBoundaryCallback.cache = mockCache
     }
@@ -52,7 +58,7 @@ class ArtBoundaryCallbackTest {
 
     @Test
     fun `when onZeroItemsLoaded is called, it calls getArt on the api`() {
-        stubRandomApiResponse()
+        stubRandomMapperResponse(stubRandomApiResponse())
 
         callOnZeroItemsLoaded()
 
@@ -60,26 +66,38 @@ class ArtBoundaryCallbackTest {
     }
 
     @Test
-    fun `when onZeroItemsLoaded is called, it calls insert on the cache with the art list from the api response`() {
-        val mockResponse = stubRandomApiResponse()
+    fun `when onZeroItemsLoaded is called, it calls toModel on the mapper with the api response`() {
+        val randomResponse = stubRandomApiResponse()
+        stubRandomMapperResponse(randomResponse)
 
         callOnZeroItemsLoaded()
 
-        verify(mockCache).insert(eq(mockResponse.artList))
+        verify(mockMapper).toModel(randomResponse)
+    }
+
+    @Test
+    fun `when onZeroItemsLoaded is called, it calls insert on the cache with the art list from the api response`() {
+        val randomResponse = stubRandomApiResponse()
+        val randomEntities = stubRandomMapperResponse(randomResponse)
+
+        callOnZeroItemsLoaded()
+
+        verify(mockCache).insert(eq(randomEntities))
     }
 
     @Test
     fun `when onZeroItemsLoaded is called and the cache insert completes, it calls saveCursor on the preferences helper with the cursor from the api response`() {
-        val mockResponse = stubRandomApiResponse()
+        val randomResponse = stubRandomApiResponse()
+        stubRandomMapperResponse(randomResponse)
 
         callOnZeroItemsLoaded()
 
-        verify(mockPrefs).saveCursor(mockResponse.cursor)
+        verify(mockPrefs).saveCursor(randomResponse.cursor)
     }
 
     @Test
     fun `when onZeroItemsLoaded is called and the cache insert has an error, saveCursor is not called`() {
-        stubRandomApiResponse()
+        stubRandomMapperResponse(stubRandomApiResponse())
         stubCacheError()
 
         callOnZeroItemsLoaded()
@@ -89,7 +107,7 @@ class ArtBoundaryCallbackTest {
 
     @Test
     fun `it only calls the api once if the cache insert from the first call hasn't completed`() {
-        stubRandomApiResponse()
+        stubRandomMapperResponse(stubRandomApiResponse())
         stubNoCacheResponse()
 
         repeat(randomInt()) { callOnZeroItemsLoaded() }
@@ -99,7 +117,7 @@ class ArtBoundaryCallbackTest {
 
     @Test
     fun `once the first cache insert completes, it calls getArt again on the next request`() {
-        stubRandomApiResponse()
+        stubRandomMapperResponse(stubRandomApiResponse())
         stubCacheDelay(1000)
 
         repeat(randomInt()) { callOnZeroItemsLoaded() }
@@ -115,8 +133,8 @@ class ArtBoundaryCallbackTest {
 
     @Test
     fun `when onItemAtEndLoaded is called, it calls getCursor on the preferences helper`() {
+        stubRandomMapperResponse(stubRandomApiResponse())
         stubRandomCursorResponse()
-        stubRandomApiResponse()
 
         callOnItemAtEndLoaded()
 
@@ -125,7 +143,7 @@ class ArtBoundaryCallbackTest {
 
     @Test
     fun `when onItemAtEndLoaded is called, it calls getArt on the api with the cursor from the preferences helper`() {
-        stubRandomApiResponse()
+        stubRandomMapperResponse(stubRandomApiResponse())
         val randomCursor = stubRandomCursorResponse()
 
         callOnItemAtEndLoaded()
@@ -135,28 +153,29 @@ class ArtBoundaryCallbackTest {
 
     @Test
     fun `when onItemAtEndLoaded is called, it calls insert on the cache with the art list from the api response`() {
+        val randomResponse = stubRandomApiResponse()
+        val randomEntities = stubRandomMapperResponse(randomResponse)
         stubRandomCursorResponse()
-        val mockResponse = stubRandomApiResponse()
 
         callOnItemAtEndLoaded()
 
-        verify(mockCache).insert(eq(mockResponse.artList))
+        verify(mockCache).insert(eq(randomEntities))
     }
 
     @Test
     fun `when onItemAtAtEndLoaded is called and the cache insert completes, it calls saveCursor on the preferences helper with the cursor from the api response`() {
         stubRandomCursorResponse()
-        val mockResponse = stubRandomApiResponse()
-
+        val randomResponse = stubRandomApiResponse()
+        stubRandomMapperResponse(randomResponse)
         callOnItemAtEndLoaded()
 
-        verify(mockPrefs).saveCursor(mockResponse.cursor)
+        verify(mockPrefs).saveCursor(randomResponse.cursor)
     }
 
     @Test
     fun `when onItemAtEndLoaded is called and the cache insert has an error, saveCursor is not called`() {
         stubRandomCursorResponse()
-        stubRandomApiResponse()
+        stubRandomMapperResponse(stubRandomApiResponse())
         stubCacheError()
 
         callOnItemAtEndLoaded()
@@ -167,7 +186,7 @@ class ArtBoundaryCallbackTest {
     @Test
     fun `if onItemAtEndLoaded is called before onZeroItemsLoaded completes, getArt is only called once`() {
         stubRandomCursorResponse()
-        stubRandomApiResponse()
+        stubRandomMapperResponse(stubRandomApiResponse())
         stubNoCacheResponse()
 
         callOnZeroItemsLoaded()
@@ -179,7 +198,7 @@ class ArtBoundaryCallbackTest {
     @Test
     fun `once onZeroItemsLoaded completes, and onItemAtEndLoaded is called, getArt is called again`() {
         stubRandomCursorResponse()
-        stubRandomApiResponse()
+        stubRandomMapperResponse(stubRandomApiResponse())
         stubCacheDelay(1000)
 
         callOnZeroItemsLoaded()
@@ -202,6 +221,13 @@ class ArtBoundaryCallbackTest {
         whenever(mockApi.getArt(any()))
             .thenReturn(Single.just(mockResponse))
         return mockResponse
+    }
+
+    private fun stubRandomMapperResponse(apiResponse: ArtApiResponse): List<ArtEntity> {
+        val mockEntityList = randomList(ArtDataFactory::randomArtEntity)
+        whenever(mockMapper.toModel(apiResponse))
+            .thenReturn(mockEntityList)
+        return mockEntityList
     }
 
     private fun stubRandomCursorResponse(): String {

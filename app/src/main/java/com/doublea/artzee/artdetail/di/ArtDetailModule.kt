@@ -2,6 +2,7 @@ package com.doublea.artzee.artdetail.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.doublea.artzee.artdetail.utils.WallpaperHelper
 import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewModel
 import com.doublea.artzee.common.di.ViewModelFactory
 import org.kodein.di.Kodein
@@ -12,7 +13,8 @@ import org.kodein.di.generic.provider
 
 fun artDetailModule() = Kodein.Module("artDetailModule") {
     bind<ViewModel>(tag = ArtDetailViewModel::class.java.simpleName) with provider {
-        ArtDetailViewModel(instance())
+        ArtDetailViewModel(instance(), instance())
     }
+    bind<WallpaperHelper>() with provider { WallpaperHelper(instance()) }
     bind<ViewModelProvider.Factory>() with provider { ViewModelFactory(kodein.direct) }
 }

@@ -6,6 +6,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.doublea.artzee.browse.view.BrowseArtFragment
 import com.doublea.artzee.common.extensions.launchFragment
+import com.doublea.artzee.common.navigator.NavigatorImpl
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -14,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
+        NavigatorImpl.currentActivity = this
         if (savedInstanceState == null) {
             BrowseArtFragment().launchFragment(supportFragmentManager, addToBackStack = false)
         }
@@ -32,6 +33,11 @@ class MainActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        NavigatorImpl.currentActivity = null
     }
 
 }

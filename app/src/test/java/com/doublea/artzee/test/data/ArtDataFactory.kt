@@ -8,55 +8,51 @@ import com.doublea.artzee.common.network.ArtApiResponse
 object ArtDataFactory {
 
     fun randomApiResponse() = ArtApiResponse(
-            TestDataFactory.randomList(this::randomArt),
-            TestDataFactory.randomString()
+        TestDataFactory.randomList(ArtsyApiDataFactory::randomArtworkResponse),
+        TestDataFactory.randomString()
     )
 
     fun randomArt() = Art(
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomStringList(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString()
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString()
     )
 
     fun randomArtEntity() = ArtEntity(
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomStringList(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString()
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomStringList(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString()
     )
 
     fun randomArtist() = Artist(
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomStringList(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString(),
-            TestDataFactory.randomString()
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomStringList(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString()
     )
 }

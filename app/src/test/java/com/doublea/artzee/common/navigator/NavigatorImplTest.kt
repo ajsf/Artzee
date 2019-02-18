@@ -1,9 +1,9 @@
 package com.doublea.artzee.common.navigator
 
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.doublea.artzee.artdetail.view.ArtDetailFragment
-import com.doublea.artzee.common.model.Art
 import com.doublea.artzee.test.data.ArtDataFactory.randomArt
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.isA
@@ -17,21 +17,29 @@ import org.mockito.MockitoAnnotations
 class NavigatorImplTest {
 
     @Mock
+    lateinit var mockActivity: FragmentActivity
+
+    @Mock
     lateinit var mockFragmentManager: FragmentManager
 
     @Mock
     lateinit var mockTransaction: FragmentTransaction
-
-    private lateinit var art: Art
 
     private lateinit var navigator: NavigatorImpl
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        whenever(mockFragmentManager.beginTransaction()).thenReturn(mockTransaction)
-        navigator = NavigatorImpl(mockFragmentManager)
-        navigator.viewArtDetail(randomArt())
+        navigator = NavigatorImpl()
+        NavigatorImpl.currentActivity = mockActivity
+
+        whenever(mockActivity.supportFragmentManager)
+            .thenReturn(mockFragmentManager)
+
+        whenever(mockFragmentManager.beginTransaction())
+            .thenReturn(mockTransaction)
+
+        navigator.viewArtDetail(randomArt().id)
     }
 
     @Test

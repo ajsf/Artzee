@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.doublea.artzee.R
 import com.doublea.artzee.artdetail.di.artDetailModule
-import com.doublea.artzee.artdetail.utils.setWallpaper
 import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewModel
 import com.doublea.artzee.common.extensions.buildViewModel
 import com.doublea.artzee.common.extensions.inflate
@@ -33,51 +32,47 @@ class ArtDetailFragment : Fragment(), KodeinAware {
 
     private val viewModel: ArtDetailViewModel by buildViewModel()
 
-    private lateinit var artId: String
-
-    private var imageUrl = ""
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        artId = this.arguments?.getString("artId") ?: ""
+        val artId = arguments?.getString("artId") ?: ""
         viewModel.selectArt(artId)
         return container?.inflate(R.layout.fragment_art_detail)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        btn_set_wallpaper.setOnClickListener { setWallpaper() }
         observeViewModel()
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-
-    private fun setWallpaper() {
-        btn_set_wallpaper.visibility = View.GONE
-        progress_set_wallpaper.visibility = View.VISIBLE
-        val callback = {
-            progress_set_wallpaper?.visibility = View.GONE
-            btn_set_wallpaper?.visibility = View.VISIBLE
-        }
-        setWallpaper(this.context, imageUrl, callback)
+        (activity as AppCompatActivity)
+            .supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun observeViewModel() {
         viewModel.artLiveData.observe(this, Observer<Art> {
             it?.let { art ->
                 setArtDetails(art)
-                imageUrl = art.getImageUrl("larger")
             }
         })
 
         viewModel.artistLiveData.observe(this, Observer<Artist> {
             tv_artists.setTextAndVisibility(it?.name ?: "")
         })
+
+        viewModel.settingWallpaper.observe(this, Observer<Boolean> {
+            if (it) {
+                btn_set_wallpaper.visibility = View.GONE
+                progress_set_wallpaper.visibility = View.VISIBLE
+            } else {
+                progress_set_wallpaper?.visibility = View.GONE
+                btn_set_wallpaper?.visibility = View.VISIBLE
+            }
+        })
+        btn_set_wallpaper.setOnClickListener { viewModel.setWallpaper() }
     }
 
     private fun setArtDetails(art: Art) {
-        iv_art.loadImage(art.getImageUrl("large_rectangle"), art_detail_progress)
+        iv_art.loadImage(art.imageRectangle, art_detail_progress)
         val details = "${art.medium}, ${art.date}"
         tv_title.text = art.title
         tv_details.text = details

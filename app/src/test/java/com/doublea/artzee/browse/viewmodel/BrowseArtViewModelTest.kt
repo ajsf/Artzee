@@ -52,13 +52,13 @@ class BrowseArtViewModelTest {
     @Test
     fun `the artList feed sends the artPagedList returned from the repository`() {
         whenever(mockRepository.getArtFeed(any()))
-                .thenReturn(Flowable.just(artPagedList))
+            .thenReturn(Flowable.just(artPagedList))
 
         viewModel = BrowseArtViewModel(mockRepository, mockNavigator)
 
         var returnedList: ArtPagedList? = null
         viewModel.artList
-                .observeForever { returnedList = it }
+            .observeForever { returnedList = it }
 
         assertEquals(artPagedList, returnedList)
     }
@@ -68,8 +68,8 @@ class BrowseArtViewModelTest {
         viewModel = BrowseArtViewModel(mockRepository, mockNavigator)
 
         val art = randomArt()
-        viewModel.selectArtItem(art)
+        viewModel.selectArtItem(art.id)
 
-        verify(mockNavigator).viewArtDetail(art)
+        verify(mockNavigator).viewArtDetail(art.id)
     }
 }
