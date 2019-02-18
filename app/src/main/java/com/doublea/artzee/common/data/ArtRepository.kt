@@ -26,8 +26,11 @@ class ArtRepositoryImpl(
         .getArtistForArtwork(artworkId)
         .subscribeOn(scheduler)
 
-    override fun getArtFeed(disposable: CompositeDisposable): Flowable<ArtPagedList> =
-        artsyCache.getArtFeed(disposable)
+    override fun getArtFeed(disposable: CompositeDisposable): Flowable<ArtPagedList> = artsyCache
+        .getArtFeed(disposable)
+        .subscribeOn(scheduler)
 
-    override fun getArtById(artId: String): Single<Art> = artsyCache.getArtById(artId)
+    override fun getArtById(artId: String): Single<Art> = artsyCache
+        .getArtById(artId)
+        .subscribeOn(scheduler)
 }

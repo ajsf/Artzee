@@ -60,6 +60,7 @@ class ArtRepositoryImplTest {
         repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
 
         val testSubscriber = repository.getArtFeed(disposable).test()
+        scheduler.triggerActions()
 
         testSubscriber.assertValue(mockPagedList)
     }
