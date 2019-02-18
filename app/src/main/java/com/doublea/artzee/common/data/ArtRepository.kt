@@ -1,5 +1,7 @@
 package com.doublea.artzee.common.data
 
+import com.doublea.artzee.common.db.ArtsyCache
+import com.doublea.artzee.common.model.Art
 import com.doublea.artzee.common.model.ArtPagedList
 import com.doublea.artzee.common.model.Artist
 import com.doublea.artzee.common.network.ArtApi
@@ -11,11 +13,12 @@ import io.reactivex.disposables.CompositeDisposable
 interface ArtRepository {
     fun getArtistForArtwork(artworkId: String): Single<Artist>
     fun getArtFeed(disposable: CompositeDisposable): Flowable<ArtPagedList>
+    fun getArtById(artId: String): Single<Art>
 }
 
 class ArtRepositoryImpl(
     private val artApi: ArtApi,
-    private val pagedListBuilder: ArtPagedListBuilder,
+    private val artsyCache: ArtsyCache,
     private val scheduler: Scheduler
 ) : ArtRepository {
 
@@ -24,5 +27,7 @@ class ArtRepositoryImpl(
         .subscribeOn(scheduler)
 
     override fun getArtFeed(disposable: CompositeDisposable): Flowable<ArtPagedList> =
-        pagedListBuilder.getPagedList(disposable)
+        artsyCache.getArtFeed(disposable)
+
+    override fun getArtById(artId: String): Single<Art> = artsyCache.getArtById(artId)
 }

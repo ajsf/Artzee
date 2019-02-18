@@ -33,7 +33,7 @@ class ArtPagedListBuilderTest {
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        artPagedListBuilder = ArtPagedListBuilder(mockCallback, mockCache)
+        artPagedListBuilder = ArtPagedListBuilder(mockCallback)
         disposable = CompositeDisposable()
     }
 
@@ -42,7 +42,7 @@ class ArtPagedListBuilderTest {
         whenever(mockCache.allArt())
             .thenReturn(TestDataSourceFactory(randomList(::randomArt)))
 
-        artPagedListBuilder.getPagedList(disposable)
+        artPagedListBuilder.getPagedList(mockCache, disposable)
 
         verify(mockCallback).compositeDisposable = disposable
     }
@@ -52,7 +52,7 @@ class ArtPagedListBuilderTest {
         whenever(mockCache.allArt())
             .thenReturn(TestDataSourceFactory(randomList(::randomArt)))
 
-        artPagedListBuilder.getPagedList(disposable)
+        artPagedListBuilder.getPagedList(mockCache, disposable)
 
         verify(mockCache).allArt()
     }
@@ -63,7 +63,7 @@ class ArtPagedListBuilderTest {
         whenever(mockCache.allArt())
             .thenReturn(TestDataSourceFactory(randomList))
 
-        val testSubscriber = artPagedListBuilder.getPagedList(disposable).test()
+        val testSubscriber = artPagedListBuilder.getPagedList(mockCache, disposable).test()
         val pagedList = testSubscriber.values().first()
 
         assertEquals(randomList, pagedList.list)

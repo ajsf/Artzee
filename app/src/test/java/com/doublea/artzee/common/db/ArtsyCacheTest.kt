@@ -2,6 +2,7 @@ package com.doublea.artzee.common.db
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.paging.DataSource
+import com.doublea.artzee.common.data.ArtPagedListBuilder
 import com.doublea.artzee.common.db.room.ArtDao
 import com.doublea.artzee.common.db.room.ArtEntity
 import com.doublea.artzee.common.mapper.Mapper
@@ -29,6 +30,9 @@ class ArtsyCacheTest {
     @Mock
     lateinit var mockMapper: Mapper<ArtEntity, Art>
 
+    @Mock
+    lateinit var mockPagedListBuilder: ArtPagedListBuilder
+
     private lateinit var dataSource: DataSource.Factory<Int, ArtEntity>
 
     private lateinit var cache: ArtsyCache
@@ -38,7 +42,7 @@ class ArtsyCacheTest {
         MockitoAnnotations.initMocks(this)
         dataSource = TestDataSourceFactory(randomList(::randomArtEntity))
         whenever(mockDao.getAllArt()).thenReturn(dataSource)
-        cache = ArtsyCache(mockDao, mockMapper)
+        cache = ArtsyCache(mockDao, mockMapper, mockPagedListBuilder)
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.doublea.artzee.common.data
 
+import com.doublea.artzee.common.db.ArtsyCache
 import com.doublea.artzee.common.model.ArtPagedList
 import com.doublea.artzee.common.network.ArtApi
 import com.doublea.artzee.test.data.ArtDataFactory.randomArtist
@@ -21,7 +22,7 @@ class ArtRepositoryImplTest {
     lateinit var mockApi: ArtApi
 
     @Mock
-    lateinit var mockPagedListBuilder: ArtPagedListBuilder
+    lateinit var mockCache: ArtsyCache
 
     @Mock
     private lateinit var mockPagedList: ArtPagedList
@@ -40,23 +41,23 @@ class ArtRepositoryImplTest {
     }
 
     @Test
-    fun `when getArtFeed is called, it calls getPagedList on the pagedListBuilder with the disposable`() {
-        whenever(mockPagedListBuilder.getPagedList(disposable))
-                .thenReturn(Flowable.just(mockPagedList))
+    fun `when getArtFeed is called, it calls getArtFeed on the pagedListBuilder with the disposable`() {
+        whenever(mockCache.getArtFeed(disposable))
+            .thenReturn(Flowable.just(mockPagedList))
 
-        repository = ArtRepositoryImpl(mockApi, mockPagedListBuilder, scheduler)
+        repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
 
         repository.getArtFeed(disposable).test()
 
-        verify(mockPagedListBuilder).getPagedList(disposable)
+        verify(mockCache).getArtFeed(disposable)
     }
 
     @Test
     fun `when getArtFeed is called, it returns the pagedList from the pagedListBuilder`() {
-        whenever(mockPagedListBuilder.getPagedList(disposable))
-                .thenReturn(Flowable.just(mockPagedList))
+        whenever(mockCache.getArtFeed(disposable))
+            .thenReturn(Flowable.just(mockPagedList))
 
-        repository = ArtRepositoryImpl(mockApi, mockPagedListBuilder, scheduler)
+        repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
 
         val testSubscriber = repository.getArtFeed(disposable).test()
 
@@ -68,9 +69,9 @@ class ArtRepositoryImplTest {
         val artist = randomArtist()
         val randomId = randomString()
         whenever(mockApi.getArtistForArtwork(randomId))
-                .thenReturn(Single.just(artist))
+            .thenReturn(Single.just(artist))
 
-        repository = ArtRepositoryImpl(mockApi, mockPagedListBuilder, scheduler)
+        repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
         repository.getArtistForArtwork(randomId)
 
         verify(mockApi).getArtistForArtwork(randomId)
@@ -82,13 +83,13 @@ class ArtRepositoryImplTest {
         val randomId = randomString()
 
         whenever(mockApi.getArtistForArtwork(randomId))
-                .thenReturn(Single.just(artist))
+            .thenReturn(Single.just(artist))
 
-        repository = ArtRepositoryImpl(mockApi, mockPagedListBuilder, scheduler)
+        repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
 
         val testSubscriber = repository
-                .getArtistForArtwork(randomId)
-                .test()
+            .getArtistForArtwork(randomId)
+            .test()
 
         scheduler.triggerActions()
 

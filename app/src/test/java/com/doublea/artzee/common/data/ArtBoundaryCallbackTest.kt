@@ -42,8 +42,9 @@ class ArtBoundaryCallbackTest {
 
         disposable = CompositeDisposable()
         scheduler = TestScheduler()
-        artBoundaryCallback = ArtBoundaryCallback(mockApi, mockCache, mockPrefs, scheduler)
+        artBoundaryCallback = ArtBoundaryCallback(mockApi, mockPrefs, scheduler)
         artBoundaryCallback.compositeDisposable = disposable
+        artBoundaryCallback.cache = mockCache
     }
 
     @After
@@ -199,14 +200,14 @@ class ArtBoundaryCallbackTest {
     private fun stubRandomApiResponse(): ArtApiResponse {
         val mockResponse = ArtDataFactory.randomApiResponse()
         whenever(mockApi.getArt(any()))
-                .thenReturn(Single.just(mockResponse))
+            .thenReturn(Single.just(mockResponse))
         return mockResponse
     }
 
     private fun stubRandomCursorResponse(): String {
         val randomCursor = TestDataFactory.randomString()
         whenever(mockPrefs.getCursor())
-                .thenReturn(randomCursor)
+            .thenReturn(randomCursor)
         return randomCursor
     }
 
@@ -222,22 +223,22 @@ class ArtBoundaryCallbackTest {
 
     private fun stubCacheError() {
         whenever(mockCache.insert(any()))
-                .thenReturn(Completable.error(Throwable()))
+            .thenReturn(Completable.error(Throwable()))
     }
 
     private fun stubCacheSuccess() {
         whenever(mockCache.insert(any()))
-                .thenReturn(Completable.complete())
+            .thenReturn(Completable.complete())
     }
 
     private fun stubNoCacheResponse() {
         whenever(mockCache.insert(any()))
-                .thenReturn(Completable.never())
+            .thenReturn(Completable.never())
     }
 
     private fun stubCacheDelay(timeMs: Long) {
         whenever(mockCache.insert(any()))
-                .thenReturn(Completable.timer(timeMs, TimeUnit.MILLISECONDS, scheduler))
+            .thenReturn(Completable.timer(timeMs, TimeUnit.MILLISECONDS, scheduler))
     }
 
 }

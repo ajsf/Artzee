@@ -15,6 +15,6 @@ import org.kodein.di.generic.singleton
 
 fun dbModule() = Kodein.Module("dbModule") {
     bind<Mapper<ArtEntity, Art>>() with provider { ArtEntityToArtMapper() }
-    bind<ArtsyCache>() with singleton { ArtsyCache(instance(), instance()) }
+    bind<ArtsyCache>() with singleton { ArtsyCache(instance(), instance(), instance()) }
     bind<ArtDao>() with provider { ArtDatabase.getInstance(instance()).artDao() }
 }
