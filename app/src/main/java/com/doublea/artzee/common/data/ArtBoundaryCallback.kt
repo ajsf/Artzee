@@ -15,7 +15,6 @@ class ArtBoundaryCallback(
         private val artApi: ArtApi,
         private val cache: ArtsyCache,
         private val prefs: PreferencesHelper,
-        private val compositeDisposable: CompositeDisposable,
         private val scheduler: Scheduler = Schedulers.io()
 ) : PagedList.BoundaryCallback<Art>() {
 
@@ -24,6 +23,8 @@ class ArtBoundaryCallback(
     override fun onZeroItemsLoaded() = requestAndSave { artApi.getArt() }
 
     override fun onItemAtEndLoaded(itemAtEnd: Art) = requestAndSave { artApi.getArt(prefs.getCursor()) }
+
+    lateinit var compositeDisposable: CompositeDisposable
 
     private fun requestAndSave(singleProvider: () -> Single<ArtApiResponse>) {
         if (isRequestInProgress) return

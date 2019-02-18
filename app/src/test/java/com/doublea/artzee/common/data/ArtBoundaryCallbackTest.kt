@@ -42,7 +42,8 @@ class ArtBoundaryCallbackTest {
 
         disposable = CompositeDisposable()
         scheduler = TestScheduler()
-        artBoundaryCallback = ArtBoundaryCallback(mockApi, mockCache, mockPrefs, disposable, scheduler)
+        artBoundaryCallback = ArtBoundaryCallback(mockApi, mockCache, mockPrefs, scheduler)
+        artBoundaryCallback.compositeDisposable = disposable
     }
 
     @After
