@@ -4,18 +4,18 @@ import com.doublea.artzee.common.network.*
 
 object ArtsyApiDataFactory {
 
-    fun randomArtworkWrapper() = ArtsyArtworkWrapper(
-            randomLinksResponse(),
+    fun randomArtworkWrapper(nextLink: String = TestDataFactory.randomString()) = ArtsyArtworkWrapper(
+            randomLinksResponse(nextLink),
             randomEmbeddedArtworkResponse()
     )
 
-    fun randomArtistsWrapper() = ArtsyArtistsWrapper(
-            randomLinksResponse(),
+    fun randomArtistsWrapper(nextLink: String = TestDataFactory.randomString()) = ArtsyArtistsWrapper(
+            randomLinksResponse(nextLink),
             randomEmbeddedArtistsResponse()
     )
 
-    private fun randomLinksResponse() = ArtsyLinksResponse(
-            randomArtsyLink(), randomArtsyLink()
+    private fun randomLinksResponse(nextLink: String) = ArtsyLinksResponse(
+            randomArtsyLink(), ArtsyLink(nextLink)
     )
 
     private fun randomArtsyLink() = ArtsyLink(TestDataFactory.randomString())
