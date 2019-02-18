@@ -8,5 +8,5 @@ class StringListTypeConverter {
     fun stringToStringList(data: String): List<String> = data.split(",")
 
     @TypeConverter
-    fun stringListToString(list: List<String>): String = list.joinToString { "," }
+    fun stringListToString(list: List<String>): String = list.joinToString(",")
 }
