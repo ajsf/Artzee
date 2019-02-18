@@ -3,19 +3,19 @@ package com.doublea.artzee.browse.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.toLiveData
-import androidx.paging.PagedList
-import com.doublea.artzee.common.model.Art
-import com.doublea.artzee.common.navigator.Navigator
 import com.doublea.artzee.common.data.ArtRepository
+import com.doublea.artzee.common.model.Art
+import com.doublea.artzee.common.model.ArtPagedList
+import com.doublea.artzee.common.navigator.Navigator
 import io.reactivex.disposables.CompositeDisposable
 
-class BrowseArtViewModel(repository: ArtRepository) : ViewModel() {
+class BrowseArtViewModel(repository: ArtRepository, private val navigator: Navigator) : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
-    val artList: LiveData<PagedList<Art>> = repository.getArtFeed(disposable).toLiveData()
-
-    lateinit var navigator: Navigator
+    val artList: LiveData<ArtPagedList> = repository
+            .getArtFeed(disposable)
+            .toLiveData()
 
     fun selectArtItem(art: Art) = navigator.viewArtDetail(art)
 

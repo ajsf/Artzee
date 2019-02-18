@@ -1,23 +1,19 @@
 package com.doublea.artzee.browse.view
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import com.doublea.artzee.R
 import com.doublea.artzee.browse.di.browseArtModule
 import com.doublea.artzee.browse.viewmodel.BrowseArtViewModel
-import com.doublea.artzee.common.model.Art
 import com.doublea.artzee.common.extensions.buildViewModel
 import com.doublea.artzee.common.extensions.inflate
-import com.doublea.artzee.common.navigator.NavigatorImpl
+import com.doublea.artzee.common.model.ArtPagedList
 import kotlinx.android.synthetic.main.fragment_browse_art.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -29,18 +25,12 @@ class BrowseArtFragment : Fragment(), KodeinAware {
 
     override val kodein = Kodein.lazy {
         extend(_parentKodein)
-        import(browseArtModule())
+        import(browseArtModule(this@BrowseArtFragment))
     }
 
     private val viewModel: BrowseArtViewModel by buildViewModel()
 
     private lateinit var adapter: ArtworkAdapter
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.d("Browse", "onAttach")
-        initViewModel()
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -52,12 +42,6 @@ class BrowseArtFragment : Fragment(), KodeinAware {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         initRecyclerView()
         initAdapter()
-    }
-
-    private fun initViewModel() {
-        fragmentManager?.let {
-            viewModel.navigator = NavigatorImpl(it)
-        }
     }
 
     private fun initRecyclerView() = artwork_list.apply {
@@ -74,6 +58,6 @@ class BrowseArtFragment : Fragment(), KodeinAware {
             })
         }
         artwork_list.adapter = adapter
-        viewModel.artList.observe(this, Observer<PagedList<Art>> { adapter.submitList(it) })
+        viewModel.artList.observe(this, Observer<ArtPagedList> { adapter.submitList(it.list) })
     }
 }
