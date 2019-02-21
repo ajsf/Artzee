@@ -48,10 +48,8 @@ class ArtsyCacheTest {
     @Test
     fun `when allArt is called, it calls getAllArt on the dao`() {
         val d = cache.allArt()
-        d.map { println("mapping") }
         Thread.sleep(2000)
         verify(mockDao).getAllArt()
-
     }
 
 }

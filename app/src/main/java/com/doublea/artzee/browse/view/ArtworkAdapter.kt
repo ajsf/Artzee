@@ -4,18 +4,22 @@ import android.app.Activity
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RelativeLayout
-import androidx.core.view.ViewCompat
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.doublea.artzee.R
-import com.doublea.artzee.common.model.Art
 import com.doublea.artzee.common.extensions.inflate
 import com.doublea.artzee.common.extensions.loadImage
+import com.doublea.artzee.common.model.Art
 import kotlinx.android.synthetic.main.artwork_list_item.view.*
 
-class ArtworkAdapter(activity: Activity?, val clickListener: (Art) -> Unit, columnCount: Int = 2) : PagedListAdapter<Art, RecyclerView.ViewHolder>(ArtDiffCallback) {
+class ArtworkAdapter(
+    activity: Activity?,
+    val clickListener: (Art, ImageView) -> Unit,
+    columnCount: Int = 2
+) : PagedListAdapter<Art, RecyclerView.ViewHolder>(ArtDiffCallback) {
 
     private var imageSize: Int = 0
 
@@ -23,6 +27,7 @@ class ArtworkAdapter(activity: Activity?, val clickListener: (Art) -> Unit, colu
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
         imageSize = (displayMetrics.widthPixels / columnCount)
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -33,6 +38,10 @@ class ArtworkAdapter(activity: Activity?, val clickListener: (Art) -> Unit, colu
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder as ArtworkViewHolder
         holder.bind(getItem(position))
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).hashCode().toLong()
     }
 
     companion object {
@@ -52,8 +61,8 @@ class ArtworkAdapter(activity: Activity?, val clickListener: (Art) -> Unit, colu
         fun bind(art: Art?) = with(itemView) {
             art?.let { a ->
                 iv_artwork_list_thumbnail.loadImage(a.thumbnail, iv_artwork_progress)
-                setOnClickListener { clickListener(a) }
-                ViewCompat.setTransitionName(this, art.id)
+                setOnClickListener { clickListener(a, iv_artwork_list_thumbnail) }
+                iv_artwork_list_thumbnail.transitionName = a.id
             }
         }
     }

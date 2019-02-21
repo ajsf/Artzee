@@ -5,10 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.toLiveData
 import com.doublea.artzee.common.data.ArtRepository
 import com.doublea.artzee.common.model.ArtPagedList
-import com.doublea.artzee.common.navigator.Navigator
 import io.reactivex.disposables.CompositeDisposable
 
-class BrowseArtViewModel(repository: ArtRepository, private val navigator: Navigator) :
+class BrowseArtViewModel(repository: ArtRepository) :
     ViewModel() {
 
     private val disposable = CompositeDisposable()
@@ -17,7 +16,7 @@ class BrowseArtViewModel(repository: ArtRepository, private val navigator: Navig
         .getArtFeed(disposable)
         .toLiveData()
 
-    fun selectArtItem(artId: String) = navigator.viewArtDetail(artId)
+    //fun selectArtItem(artId: String, itemId: Long) = navigator.viewArtDetail(artId, itemId)
 
     override fun onCleared() {
         super.onCleared()

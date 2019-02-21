@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.transition.*
 import com.doublea.artzee.R
 import com.doublea.artzee.artdetail.di.artDetailModule
 import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewModel
@@ -21,38 +22,66 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 
+const val ART_ID_KEY = "artID"
+
 class ArtDetailFragment : Fragment(), KodeinAware {
 
     private val _parentKodein: Kodein by closestKodein()
+
+    private lateinit var artId: String
 
     override val kodein = Kodein.lazy {
         extend(_parentKodein)
         import(artDetailModule())
     }
 
+    private val transitionListener = object : TransitionListenerAdapter() {
+
+        override fun onTransitionStart(transition: Transition) {
+            detail_text_wrapper?.visibility = View.GONE
+            btn_set_wallpaper?.visibility = View.GONE
+        }
+
+        override fun onTransitionEnd(transition: Transition) {
+            detail_text_wrapper?.visibility = View.VISIBLE
+            btn_set_wallpaper?.visibility = View.VISIBLE
+        }
+    } as Transition.TransitionListener
+
+    private val transition = TransitionSet()
+        .addTransition(ChangeBounds())
+        .addTransition(ChangeTransform())
+        .addTransition(ChangeImageTransform())
+        .setDuration(600)
+        .addListener(transitionListener)
+
     private val viewModel: ArtDetailViewModel by buildViewModel()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val artId = arguments?.getString("artId") ?: ""
+        artId = arguments?.getString(ART_ID_KEY) ?: ""
         viewModel.selectArt(artId)
         return container?.inflate(R.layout.fragment_art_detail)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupTransition()
+        observeViewModel()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        observeViewModel()
         (activity as AppCompatActivity)
             .supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun observeViewModel() {
         viewModel.artLiveData.observe(this, Observer<Art> {
-            it?.let { art ->
-                setArtDetails(art)
-            }
+            it?.let { art -> setArtDetails(art) }
         })
 
         viewModel.artistLiveData.observe(this, Observer<Artist> {
@@ -71,8 +100,17 @@ class ArtDetailFragment : Fragment(), KodeinAware {
         btn_set_wallpaper.setOnClickListener { viewModel.setWallpaper() }
     }
 
+    private fun setupTransition() {
+        postponeEnterTransition()
+        sharedElementEnterTransition = transition
+        iv_art.transitionName = artId
+    }
+
     private fun setArtDetails(art: Art) {
-        iv_art.loadImage(art.imageRectangle, art_detail_progress)
+        iv_art.loadImage(art.imageRectangle) {
+            startPostponedEnterTransition()
+        }
+
         val details = "${art.medium}, ${art.date}"
         tv_title.text = art.title
         tv_details.text = details
@@ -89,7 +127,7 @@ class ArtDetailFragment : Fragment(), KodeinAware {
         if (value.isBlank()) {
             visibility = View.GONE
         } else {
-            text = value
+            text = value.trim()
             visibility = View.VISIBLE
         }
     }

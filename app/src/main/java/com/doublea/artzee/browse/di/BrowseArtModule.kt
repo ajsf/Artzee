@@ -15,8 +15,7 @@ import org.kodein.di.generic.provider
 
 fun browseArtModule() = Kodein.Module("browseArtModule") {
     bind<ViewModel>(tag = BrowseArtViewModel::class.java.simpleName) with provider {
-        BrowseArtViewModel(instance(), instance())
+        BrowseArtViewModel(instance())
     }
-    bind<Navigator>() with provider { NavigatorImpl() }
     bind<ViewModelProvider.Factory>() with provider { ViewModelFactory(kodein.direct) }
 }

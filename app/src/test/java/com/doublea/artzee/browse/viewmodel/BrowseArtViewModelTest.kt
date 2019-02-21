@@ -5,8 +5,6 @@ import androidx.paging.PagedList
 import com.doublea.artzee.common.data.ArtRepository
 import com.doublea.artzee.common.model.Art
 import com.doublea.artzee.common.model.ArtPagedList
-import com.doublea.artzee.common.navigator.Navigator
-import com.doublea.artzee.test.data.ArtDataFactory.randomArt
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -28,9 +26,6 @@ class BrowseArtViewModelTest {
     lateinit var mockRepository: ArtRepository
 
     @Mock
-    lateinit var mockNavigator: Navigator
-
-    @Mock
     lateinit var pagedList: PagedList<Art>
 
     private lateinit var artPagedList: ArtPagedList
@@ -45,7 +40,7 @@ class BrowseArtViewModelTest {
 
     @Test
     fun `it calls getArtFeed on the repository when it's created`() {
-        viewModel = BrowseArtViewModel(mockRepository, mockNavigator)
+        viewModel = BrowseArtViewModel(mockRepository)
         verify(mockRepository).getArtFeed(any())
     }
 
@@ -54,22 +49,12 @@ class BrowseArtViewModelTest {
         whenever(mockRepository.getArtFeed(any()))
             .thenReturn(Flowable.just(artPagedList))
 
-        viewModel = BrowseArtViewModel(mockRepository, mockNavigator)
+        viewModel = BrowseArtViewModel(mockRepository)
 
         var returnedList: ArtPagedList? = null
         viewModel.artList
             .observeForever { returnedList = it }
 
         assertEquals(artPagedList, returnedList)
-    }
-
-    @Test
-    fun `calling selectArtItem calls viewArtDetail on the navigator`() {
-        viewModel = BrowseArtViewModel(mockRepository, mockNavigator)
-
-        val art = randomArt()
-        viewModel.selectArtItem(art.id)
-
-        verify(mockNavigator).viewArtDetail(art.id)
     }
 }

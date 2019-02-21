@@ -5,72 +5,65 @@
     android:layout_height="match_parent"
     tools:context="com.doublea.artzee.artdetail.view.ArtDetailFragment">
 
-    <FrameLayout
-        android:id="@+id/artwork_detail_image_container"
+    <ImageView
+        android:id="@+id/iv_art"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/artwork"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".6" />
+
+    <LinearLayout
+        android:id="@+id/detail_text_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="200dp">
+        android:orientation="vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline">
 
-        <ProgressBar
-            android:id="@+id/art_detail_progress"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:padding="16dp" />
+            android:paddingTop="4dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+            tools:text="An Artwork" />
 
-        <ImageView
-            android:id="@+id/iv_art"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_artists"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/artwork"
-            android:scaleType="fitCenter"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </FrameLayout>
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            tools:text="Artists" />
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        android:paddingTop="4dp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-        app:layout_constraintTop_toBottomOf="@id/artwork_detail_image_container"
-        tools:text="An Artwork" />
+        <TextView
+            android:id="@+id/tv_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+            tools:text="Some details" />
 
-    <TextView
-        android:id="@+id/tv_artists"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
-        tools:text="Artists" />
-
-    <TextView
-        android:id="@+id/tv_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        android:paddingTop="4dp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-        app:layout_constraintTop_toBottomOf="@id/tv_artists"
-        tools:text="Some details" />
-
-    <TextView
-        android:id="@+id/tv_details2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-        app:layout_constraintTop_toBottomOf="@id/tv_details"
-        tools:text="Some more details" />
+        <TextView
+            android:id="@+id/tv_details2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+            tools:text="Some more details" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_set_wallpaper"
@@ -90,6 +83,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

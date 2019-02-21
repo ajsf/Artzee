@@ -5,17 +5,26 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.doublea.artzee.browse.view.BrowseArtFragment
+import com.doublea.artzee.common.di.activityModule
 import com.doublea.artzee.common.extensions.launchFragment
-import com.doublea.artzee.common.navigator.NavigatorImpl
 import kotlinx.android.synthetic.main.activity_main.*
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.closestKodein
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), KodeinAware {
+
+    private val _parentKodein: Kodein by closestKodein()
+
+    override val kodein = Kodein.lazy {
+        extend(_parentKodein)
+        import(activityModule(this@MainActivity))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        NavigatorImpl.currentActivity = this
         if (savedInstanceState == null) {
             BrowseArtFragment().launchFragment(supportFragmentManager, addToBackStack = false)
         }
@@ -34,10 +43,4 @@ class MainActivity : AppCompatActivity() {
         }
         else -> super.onOptionsItemSelected(item)
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        NavigatorImpl.currentActivity = null
-    }
-
 }
