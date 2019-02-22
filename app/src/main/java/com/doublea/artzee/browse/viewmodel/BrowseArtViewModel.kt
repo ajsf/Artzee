@@ -16,7 +16,7 @@ class BrowseArtViewModel(repository: ArtRepository) :
         .getArtFeed(disposable)
         .toLiveData()
 
-    //fun selectArtItem(artId: String, itemId: Long) = navigator.viewArtDetail(artId, itemId)
+    var currentPosition: Int = 0
 
     override fun onCleared() {
         super.onCleared()

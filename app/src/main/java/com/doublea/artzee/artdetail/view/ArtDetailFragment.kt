@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.transition.*
 import com.doublea.artzee.R
@@ -14,15 +14,17 @@ import com.doublea.artzee.artdetail.di.artDetailModule
 import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewModel
 import com.doublea.artzee.common.extensions.buildViewModel
 import com.doublea.artzee.common.extensions.inflate
+import com.doublea.artzee.common.extensions.launchFragment
 import com.doublea.artzee.common.extensions.loadImage
 import com.doublea.artzee.common.model.Art
-import com.doublea.artzee.common.model.Artist
 import kotlinx.android.synthetic.main.fragment_art_detail.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 
-const val ART_ID_KEY = "artID"
+private const val ART_ID_KEY = "ART_ID"
+
+const val TRANSITION_TIME = 700L
 
 class ArtDetailFragment : Fragment(), KodeinAware {
 
@@ -35,25 +37,11 @@ class ArtDetailFragment : Fragment(), KodeinAware {
         import(artDetailModule())
     }
 
-    private val transitionListener = object : TransitionListenerAdapter() {
-
-        override fun onTransitionStart(transition: Transition) {
-            detail_text_wrapper?.visibility = View.GONE
-            btn_set_wallpaper?.visibility = View.GONE
-        }
-
-        override fun onTransitionEnd(transition: Transition) {
-            detail_text_wrapper?.visibility = View.VISIBLE
-            btn_set_wallpaper?.visibility = View.VISIBLE
-        }
-    } as Transition.TransitionListener
-
     private val transition = TransitionSet()
         .addTransition(ChangeBounds())
         .addTransition(ChangeTransform())
         .addTransition(ChangeImageTransform())
-        .setDuration(600)
-        .addListener(transitionListener)
+        .setDuration(TRANSITION_TIME)
 
     private val viewModel: ArtDetailViewModel by buildViewModel()
 
@@ -84,10 +72,6 @@ class ArtDetailFragment : Fragment(), KodeinAware {
             it?.let { art -> setArtDetails(art) }
         })
 
-        viewModel.artistLiveData.observe(this, Observer<Artist> {
-            tv_artists.setTextAndVisibility(it?.name ?: "")
-        })
-
         viewModel.settingWallpaper.observe(this, Observer<Boolean> {
             if (it) {
                 btn_set_wallpaper.visibility = View.GONE
@@ -97,6 +81,7 @@ class ArtDetailFragment : Fragment(), KodeinAware {
                 btn_set_wallpaper?.visibility = View.VISIBLE
             }
         })
+
         btn_set_wallpaper.setOnClickListener { viewModel.setWallpaper() }
     }
 
@@ -104,31 +89,23 @@ class ArtDetailFragment : Fragment(), KodeinAware {
         postponeEnterTransition()
         sharedElementEnterTransition = transition
         iv_art.transitionName = artId
+        enterTransition = Fade().apply { duration = TRANSITION_TIME + 100 }
+        returnTransition = Fade().apply { duration = TRANSITION_TIME / 2 }
     }
 
     private fun setArtDetails(art: Art) {
         iv_art.loadImage(art.imageRectangle) {
             startPostponedEnterTransition()
         }
-
-        val details = "${art.medium}, ${art.date}"
-        tv_title.text = art.title
-        tv_details.text = details
-        tv_details2.setTextAndVisibility(
-            if (art.collectingInstitution.isBlank()) {
-                ""
-            } else {
-                "Collecting institution: ${art.collectingInstitution}"
-            }
-        )
     }
 
-    private fun TextView.setTextAndVisibility(value: String) {
-        if (value.isBlank()) {
-            visibility = View.GONE
-        } else {
-            text = value.trim()
-            visibility = View.VISIBLE
+    companion object {
+        fun launch(fragmentManager: FragmentManager, artId: String, sharedViews: List<View>) {
+            val bundle = Bundle().apply { putString(ART_ID_KEY, artId) }
+
+            ArtDetailFragment()
+                .apply { arguments = bundle }
+                .launchFragment(fragmentManager, true, null, sharedViews)
         }
     }
 }

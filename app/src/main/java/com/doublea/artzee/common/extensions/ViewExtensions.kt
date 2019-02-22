@@ -8,18 +8,14 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import androidx.transition.Explode
 import com.doublea.artzee.R
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.kodein.di.KodeinAware
 import org.kodein.di.direct
 import org.kodein.di.generic.instance
-
-private const val EXPLODE_TIME = 350L
 
 fun ViewGroup.inflate(layoutId: Int, attachToRoot: Boolean = false): View {
     return LayoutInflater.from(context).inflate(layoutId, this, attachToRoot)
@@ -53,17 +49,14 @@ fun ImageView.loadImage(
 fun Fragment.launchFragment(
     fm: FragmentManager,
     addToBackStack: Boolean = true,
-    tag: String = "TAG",
+    tag: String? = null,
     sharedElements: List<View> = listOf()
 ) {
-    fm.findFragmentById(R.id.fragment_container)?.exitTransition =
-        Explode().apply { duration = EXPLODE_TIME }
-
     fm.beginTransaction().apply {
         setReorderingAllowed(true)
-        replace(R.id.fragment_container, this@launchFragment, tag)
         sharedElements.onEach { addSharedElement(it, it.transitionName) }
-        if (addToBackStack) addToBackStack(null)
+        if (addToBackStack) addToBackStack(tag)
+        replace(R.id.fragment_container, this@launchFragment, null)
         commit()
     }
 }

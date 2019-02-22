@@ -1,6 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--?xml version="1.0" encoding="UTF-8"?-->
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="primaryColor">#01579b</color>
+    <color name="primaryLightColor">#4f83cc</color>
+    <color name="primaryDarkColor">#002f6c</color>
+    <color name="secondaryColor">#ad1457</color>
+    <color name="secondaryLightColor">#e35183</color>
+    <color name="secondaryDarkColor">#78002e</color>
+    <color name="primaryTextColor">#000</color>
+    <color name="secondaryTextColor">#ffffff</color>
+    <color name="lightBackgroundColor">#D8D8D8</color>
+
+    <color name="background1">#ff8a80</color>
+    <color name="background2">#ff80ab</color>
+    <color name="background3">#ea80fc</color>
+    <color name="background4">#b388ff</color>
+    <color name="background5">#8c9eff</color>
+    <color name="background6">#82b1ff</color>
+    <color name="background7">#80d8ff</color>
+    <color name="background8">#84ffff</color>
+    <color name="background9">#a7ffeb</color>
+    <color name="background10">#b9f6ca</color>
+    <color name="background11">#ccff90</color>
+    <color name="background12">#ffff8d</color>
+    <color name="background13">#ffe57f</color>
+    <color name="background14">#f4ff81</color>
+    <color name="background15">#ffd180</color>
+    <color name="background16">#ff9e80</color>
+
+    <color name="transparent">#00000000</color>
+
+    <array name="background_colors">
+        <item>@color/background1</item>
+        <item>@color/background2</item>
+        <item>@color/background3</item>
+        <item>@color/background4</item>
+        <item>@color/background5</item>
+        <item>@color/background6</item>
+        <item>@color/background7</item>
+        <item>@color/background8</item>
+        <item>@color/background9</item>
+        <item>@color/background10</item>
+        <item>@color/background11</item>
+        <item>@color/background12</item>
+        <item>@color/background13</item>
+        <item>@color/background14</item>
+        <item>@color/background15</item>
+        <item>@color/background16</item>
+    </array>
+
 </resources>

@@ -40,7 +40,11 @@ class BrowseArtViewModelTest {
 
     @Test
     fun `it calls getArtFeed on the repository when it's created`() {
+        whenever(mockRepository.getArtFeed(any()))
+            .thenReturn(Flowable.just(artPagedList))
+
         viewModel = BrowseArtViewModel(mockRepository)
+
         verify(mockRepository).getArtFeed(any())
     }
 

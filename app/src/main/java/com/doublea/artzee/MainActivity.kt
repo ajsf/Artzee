@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         if (savedInstanceState == null) {
-            BrowseArtFragment().launchFragment(supportFragmentManager, addToBackStack = false)
+            BrowseArtFragment().launchFragment(supportFragmentManager, false)
         }
     }
 
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_settings -> true
         android.R.id.home -> with(supportFragmentManager) {
-            if (backStackEntryCount > 0) popBackStack()
+            popBackStack()
             true
         }
         else -> super.onOptionsItemSelected(item)

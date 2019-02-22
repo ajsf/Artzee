@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/iv_artwork_list_thumbnail"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:contentDescription="@string/artwork_list_item_content_description"
         android:scaleType="centerCrop" />
@@ -17,6 +17,7 @@
         android:id="@+id/iv_artwork_progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true" />
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/secondaryLightColor" />
 
-</RelativeLayout>
+</FrameLayout>
