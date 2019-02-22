@@ -1,0 +1,73 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:name="com.doublea.artzee.browse.ui.BrowseArtTextFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="8dp">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/name_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:alignContent="stretch"
+            app:alignItems="stretch"
+            app:flexWrap="wrap"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                tools:text="An Artwork with" />
+
+            <TextView
+                android:id="@+id/tv_artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                app:layout_alignSelf="baseline"
+                tools:text="Artist" />
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <TextView
+            android:id="@+id/tv_details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+            app:layout_constraintLeft_toLeftOf="@id/name_wrapper"
+            app:layout_constraintRight_toRightOf="@id/name_wrapper"
+            app:layout_constraintTop_toBottomOf="@id/name_wrapper"
+            tools:text="Some details" />
+
+        <TextView
+            android:id="@+id/tv_details2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+            app:layout_constraintLeft_toLeftOf="@id/tv_details"
+            app:layout_constraintRight_toRightOf="@id/name_wrapper"
+            app:layout_constraintTop_toBottomOf="@id/tv_details"
+            tools:text="Some more details" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
