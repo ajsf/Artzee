@@ -8,11 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.doublea.artzee.R
-import com.doublea.artzee.artdetail.di.artDetailModule
 import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewModel
 import com.doublea.artzee.common.extensions.buildViewModel
 import com.doublea.artzee.common.model.Art
@@ -26,14 +24,11 @@ private const val COLOR_ID_KEY = "COLOR_ID"
 
 class ArtDetailTextFragment : Fragment(), KodeinAware {
 
-    private val _parentKodein: Kodein by closestKodein()
-
-    override val kodein = Kodein.lazy {
-        extend(_parentKodein)
-        import(artDetailModule())
-    }
+    override val kodein: Kodein by closestKodein()
 
     private val viewModel: ArtDetailViewModel by buildViewModel()
+
+    private var rotated = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +42,15 @@ class ArtDetailTextFragment : Fragment(), KodeinAware {
         super.onViewCreated(view, savedInstanceState)
         val colorId = arguments?.getInt(COLOR_ID_KEY) ?: R.color.primaryDarkColor
         card_view.setBackgroundColor(colorId)
-        card_view.translationY = -1000f
+        if (savedInstanceState == null) {
+            card_view.translationY = -1000f
+        } else {
+            rotated = true
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         observeViewModel()
     }
 
@@ -62,12 +65,13 @@ class ArtDetailTextFragment : Fragment(), KodeinAware {
     }
 
     override fun onCreateAnimator(transit: Int, enter: Boolean, nextAnim: Int): Animator? {
-        return if (enter.not() && activity != null) {
-            AnimatorInflater.loadAnimator(activity, nextAnim).apply {
-                addListener(AnimationEndListener {
-                    (activity as FragmentActivity).supportFragmentManager.popBackStack()
+        return if (enter.not() && nextAnim != 0) {
+            val animationListener =
+                AnimationListener(endAction = {
+                    if (rotated) activity?.finish() else activity?.finishAfterTransition()
                 })
-            }
+            AnimatorInflater.loadAnimator(activity, nextAnim)
+                .apply { addListener(animationListener) }
         } else super.onCreateAnimator(transit, enter, nextAnim)
     }
 
@@ -94,25 +98,17 @@ class ArtDetailTextFragment : Fragment(), KodeinAware {
     }
 
     companion object {
+        const val TAG = "TEXT_FRAGMENT"
         fun launch(fragmentManager: FragmentManager, colorId: Int) {
             val bundle = Bundle().also { it.putInt(COLOR_ID_KEY, colorId) }
-
-            val fragment = ArtDetailTextFragment()
-                .apply { arguments = bundle }
+            val fragment = ArtDetailTextFragment().apply { arguments = bundle }
 
             fragmentManager.beginTransaction().apply {
-                setReorderingAllowed(true)
-                setCustomAnimations(
-                    R.animator.slide_in,
-                    R.animator.slide_out,
-                    R.animator.slide_in,
-                    R.animator.slide_out
-                )
+                setCustomAnimations(R.animator.slide_in, 0, 0, R.animator.slide_out)
                 addToBackStack(null)
-                replace(R.id.text_fragment_container, fragment, null)
+                replace(R.id.text_fragment_container, fragment, TAG)
                 commit()
             }
         }
     }
 }
-

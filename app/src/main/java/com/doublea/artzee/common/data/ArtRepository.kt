@@ -30,7 +30,9 @@ class ArtRepositoryImpl(
         .getArtFeed(disposable)
         .subscribeOn(scheduler)
 
-    override fun getArtById(artId: String): Single<Art> = artsyCache
-        .getArtById(artId)
-        .subscribeOn(scheduler)
+    override fun getArtById(artId: String): Single<Art> {
+        return artsyCache
+            .getArtById(artId)
+            .subscribeOn(scheduler)
+    }
 }

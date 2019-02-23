@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.doublea.artzee.R
@@ -46,23 +46,14 @@ fun ImageView.loadImage(
     }
 }
 
-fun Fragment.launchFragment(
-    fm: FragmentManager,
-    addToBackStack: Boolean = true,
-    tag: String? = null,
-    sharedElements: List<View> = listOf()
-) {
-    fm.beginTransaction().apply {
-        setReorderingAllowed(true)
-        sharedElements.onEach { addSharedElement(it, it.transitionName) }
-        if (addToBackStack) addToBackStack(tag)
-        replace(R.id.fragment_container, this@launchFragment, null)
-        commit()
+inline fun <reified VM : ViewModel, T> T.buildViewModel(): Lazy<VM> where T : KodeinAware, T : FragmentActivity {
+    return lazy {
+        ViewModelProviders.of(this, direct.instance()).get(VM::class.java)
     }
 }
 
 inline fun <reified VM : ViewModel, T> T.buildViewModel(): Lazy<VM> where T : KodeinAware, T : Fragment {
     return lazy {
-        ViewModelProviders.of(this, direct.instance()).get(VM::class.java)
+        ViewModelProviders.of(activity!!, direct.instance()).get(VM::class.java)
     }
 }

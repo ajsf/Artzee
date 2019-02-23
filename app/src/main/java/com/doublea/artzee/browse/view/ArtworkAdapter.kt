@@ -13,25 +13,24 @@ import com.doublea.artzee.common.extensions.inflate
 import com.doublea.artzee.common.extensions.loadImage
 import com.doublea.artzee.common.model.Art
 import kotlinx.android.synthetic.main.artwork_list_item.view.*
-import org.jetbrains.anko.backgroundColor
 
 typealias AdapterClickLister = (String, Int, Int) -> Unit
 
 class ArtworkAdapter(
-    private val fragment: BrowseArtFragment,
+    private val activity: BrowseActivity,
     private val currentPosition: Int,
     columnCount: Int = 2
 ) : PagedListAdapter<Art, RecyclerView.ViewHolder>(ArtDiffCallback) {
 
     private var imageSize: Int = 0
 
-    private val backgroundColors = fragment.resources.getIntArray(R.array.background_colors)
+    private val backgroundColors = activity.resources.getIntArray(R.array.background_colors)
 
     lateinit var clickListener: AdapterClickLister
 
     init {
         val displayMetrics = DisplayMetrics()
-        fragment.activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
         imageSize = (displayMetrics.widthPixels / columnCount)
         setHasStableIds(true)
     }
@@ -65,12 +64,12 @@ class ArtworkAdapter(
         }
 
         fun bind(art: Art, colorId: Int, position: Int) = with(itemView) {
-            iv_artwork_list_thumbnail.backgroundColor = colorId
+            doOnPreDraw { activity.startPostponedEnterTransition() }
+
+            iv_artwork_list_thumbnail.setBackgroundColor(colorId)
             iv_artwork_list_thumbnail.transitionName = art.id
             iv_artwork_list_thumbnail.loadImage(art.thumbnail, iv_artwork_progress) {
-                if (position == currentPosition) {
-                    doOnPreDraw { fragment.startPostponedEnterTransition() }
-                }
+
             }
             setOnClickListener { clickListener(art.id, position, colorId) }
         }
