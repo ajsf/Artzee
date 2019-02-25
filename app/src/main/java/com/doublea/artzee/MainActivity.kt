@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         if (savedInstanceState == null) {
-            BrowseArtFragment().launchFragment(supportFragmentManager, false)
+            BrowseArtFragment().launchFragment(supportFragmentManager, false, BrowseArtFragment.TAG)
         }
     }
 

@@ -6,15 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.transition.*
 import com.doublea.artzee.R
 import com.doublea.artzee.artdetail.di.artDetailModule
 import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewModel
+import com.doublea.artzee.common.Constants.ART_ID_KEY
+import com.doublea.artzee.common.Constants.COLOR_ID_KEY
+import com.doublea.artzee.common.Constants.TRANSITION_TIME
 import com.doublea.artzee.common.extensions.buildViewModel
 import com.doublea.artzee.common.extensions.inflate
-import com.doublea.artzee.common.extensions.launchFragment
 import com.doublea.artzee.common.extensions.loadImage
 import com.doublea.artzee.common.model.Art
 import kotlinx.android.synthetic.main.fragment_art_detail.*
@@ -22,15 +23,13 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 
-private const val ART_ID_KEY = "ART_ID"
-
-const val TRANSITION_TIME = 700L
 
 class ArtDetailFragment : Fragment(), KodeinAware {
 
     private val _parentKodein: Kodein by closestKodein()
 
     private lateinit var artId: String
+    private var colorId: Int = 0
 
     override val kodein = Kodein.lazy {
         extend(_parentKodein)
@@ -51,6 +50,7 @@ class ArtDetailFragment : Fragment(), KodeinAware {
         savedInstanceState: Bundle?
     ): View? {
         artId = arguments?.getString(ART_ID_KEY) ?: ""
+        colorId = arguments?.getInt(COLOR_ID_KEY) ?: 0
         viewModel.selectArt(artId)
         return container?.inflate(R.layout.fragment_art_detail)
     }
@@ -96,17 +96,17 @@ class ArtDetailFragment : Fragment(), KodeinAware {
     private fun setArtDetails(art: Art) {
         iv_art.loadImage(art.imageRectangle) {
             startPostponedEnterTransition()
+            launchTextFragment()
         }
     }
 
-    companion object {
-        fun launch(fragmentManager: FragmentManager, artId: String, sharedViews: List<View>) {
-            val bundle = Bundle().apply { putString(ART_ID_KEY, artId) }
+    private fun launchTextFragment() = fragmentManager?.let {
+        it.findFragmentByTag(ArtDetailTextFragment.TAG) ?: ArtDetailTextFragment
+            .launch(it, colorId)
+    }
 
-            ArtDetailFragment()
-                .apply { arguments = bundle }
-                .launchFragment(fragmentManager, true, null, sharedViews)
-        }
+    companion object {
+        const val TAG = "DETAIL_FRAGMENT"
     }
 }
 

@@ -12,9 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.Explode
 import com.doublea.artzee.R
-import com.doublea.artzee.artdetail.view.TRANSITION_TIME
 import com.doublea.artzee.browse.di.browseArtModule
 import com.doublea.artzee.browse.viewmodel.BrowseArtViewModel
+import com.doublea.artzee.common.Constants.TRANSITION_TIME
 import com.doublea.artzee.common.extensions.buildViewModel
 import com.doublea.artzee.common.extensions.inflate
 import com.doublea.artzee.common.model.ArtPagedList
@@ -98,5 +98,9 @@ class BrowseArtFragment : Fragment(), KodeinAware {
                 as ArtworkAdapter.ArtworkViewHolder
 
         return holder.itemView.find(R.id.iv_artwork_list_thumbnail)
+    }
+
+    companion object {
+        const val TAG = "BROWSE_FRAGMENT"
     }
 }

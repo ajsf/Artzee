@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import com.doublea.artzee.R
 import com.doublea.artzee.artdetail.di.artDetailModule
 import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewModel
+import com.doublea.artzee.common.Constants.COLOR_ID_KEY
 import com.doublea.artzee.common.extensions.buildViewModel
 import com.doublea.artzee.common.model.Art
 import com.doublea.artzee.common.model.Artist
@@ -21,8 +22,6 @@ import kotlinx.android.synthetic.main.fragment_art_detail_text.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
-
-private const val COLOR_ID_KEY = "COLOR_ID"
 
 class ArtDetailTextFragment : Fragment(), KodeinAware {
 
@@ -47,7 +46,9 @@ class ArtDetailTextFragment : Fragment(), KodeinAware {
         super.onViewCreated(view, savedInstanceState)
         val colorId = arguments?.getInt(COLOR_ID_KEY) ?: R.color.primaryDarkColor
         card_view.setBackgroundColor(colorId)
-        card_view.translationY = -1000f
+        if (savedInstanceState == null) {
+            card_view.translationY = -1000f
+        }
         observeViewModel()
     }
 
@@ -94,6 +95,8 @@ class ArtDetailTextFragment : Fragment(), KodeinAware {
     }
 
     companion object {
+        const val TAG = "DETAIL_TEXT_FRAGMENT"
+
         fun launch(fragmentManager: FragmentManager, colorId: Int) {
             val bundle = Bundle().also { it.putInt(COLOR_ID_KEY, colorId) }
 
@@ -109,7 +112,7 @@ class ArtDetailTextFragment : Fragment(), KodeinAware {
                     R.animator.slide_out
                 )
                 addToBackStack(null)
-                replace(R.id.text_fragment_container, fragment, null)
+                replace(R.id.text_fragment_container, fragment, TAG)
                 commit()
             }
         }
