@@ -45,7 +45,7 @@ class ArtBoundaryCallback(
         val artEntityList = mapper.toModel(response)
 
         compositeDisposable.add(
-            cache.insert(artEntityList)
+            cache.insertArtworks(artEntityList)
                 .subscribeOn(scheduler)
                 .subscribeBy(
                     onError = { println("Cache error") },

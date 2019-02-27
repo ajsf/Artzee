@@ -1,6 +1,7 @@
 package com.doublea.artzee.test.data
 
 import com.doublea.artzee.common.db.room.ArtEntity
+import com.doublea.artzee.common.db.room.ArtistEntity
 import com.doublea.artzee.common.model.Art
 import com.doublea.artzee.common.model.Artist
 import com.doublea.artzee.common.network.ArtApiResponse
@@ -12,7 +13,7 @@ object ArtDataFactory {
         TestDataFactory.randomString()
     )
 
-    fun randomArt() = Art(
+    fun randomArt(artistId: String? = TestDataFactory.randomString()) = Art(
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),
@@ -21,7 +22,8 @@ object ArtDataFactory {
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),
-        TestDataFactory.randomString()
+        TestDataFactory.randomString(),
+        artistId
     )
 
     fun randomArtEntity() = ArtEntity(
@@ -37,10 +39,27 @@ object ArtDataFactory {
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),
-        TestDataFactory.randomString()
+        TestDataFactory.randomString(),
+        null
     )
 
     fun randomArtist() = Artist(
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomStringList(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString()
+    )
+
+    fun randomArtistEntity() = ArtistEntity(
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),

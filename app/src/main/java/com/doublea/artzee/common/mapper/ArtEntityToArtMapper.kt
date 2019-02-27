@@ -9,7 +9,8 @@ class ArtEntityToArtMapper : Mapper<ArtEntity, Art> {
             id, title, category, medium,
             date, collectingInstitution, thumbnail,
             getImageUrl("larger"),
-            getImageUrl("medium")
+            getImageUrl("medium"),
+            artistId
         )
     }
 

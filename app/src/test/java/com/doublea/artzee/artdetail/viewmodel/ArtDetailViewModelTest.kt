@@ -38,7 +38,7 @@ class ArtDetailViewModelTest {
     @Test
     fun `when selectArt is called, it calls getArtById on the repository with the art ID`() {
         val randomArt = stubRandomArt()
-        stubRandomArtist(randomArt.id)
+        stubRandomArtist(randomArt)
 
         artDetailViewModel.selectArt(randomArt.id)
 
@@ -46,19 +46,19 @@ class ArtDetailViewModelTest {
     }
 
     @Test
-    fun `when selectArt is called, it calls getArtistForArtwork on the repository with the art ID`() {
+    fun `when selectArt is called, it calls getArtistForArtwork on the repository with the returned art object`() {
         val randomArt = stubRandomArt()
-        stubRandomArtist(randomArt.id)
+        stubRandomArtist(randomArt)
 
         artDetailViewModel.selectArt(randomArt.id)
 
-        verify(mockRepository).getArtistForArtwork(randomArt.id)
+        verify(mockRepository).getArtistForArtwork(randomArt)
     }
 
     @Test
     fun `when selectArt is called, it updates the artLiveData with the art from the repository`() {
         val randomArt = stubRandomArt()
-        stubRandomArtist(randomArt.id)
+        stubRandomArtist(randomArt)
 
         artDetailViewModel.selectArt(randomArt.id)
 
@@ -72,7 +72,7 @@ class ArtDetailViewModelTest {
     @Test
     fun `when selectArt is called, it updates the artistLiveData with the artist from the repository`() {
         val randomArt = stubRandomArt()
-        val randomArtist = stubRandomArtist(randomArt.id)
+        val randomArtist = stubRandomArtist(randomArt)
 
         artDetailViewModel.selectArt(randomArt.id)
 
@@ -86,7 +86,7 @@ class ArtDetailViewModelTest {
     @Test
     fun `when art has been selected and setWallpaper is called, it calls setWallpaper on the WallpaperHelper with the art's image`() {
         val randomArt = stubRandomArt()
-        stubRandomArtist(randomArt.id)
+        stubRandomArtist(randomArt)
         stubSetWallpaper(randomArt.id)
 
         artDetailViewModel.setWallpaper()
@@ -97,7 +97,7 @@ class ArtDetailViewModelTest {
     @Test
     fun `settingWallpaper LiveData is set to false when it is created`() {
         val randomArt = stubRandomArt()
-        stubRandomArtist(randomArt.id)
+        stubRandomArtist(randomArt)
 
         val settingWallpaper = artDetailViewModel.settingWallpaper.value
 
@@ -107,7 +107,7 @@ class ArtDetailViewModelTest {
     @Test
     fun `when art has been selected and setWallpaper is called, it sets settingWallpaper LiveData to true`() {
         val randomArt = stubRandomArt()
-        stubRandomArtist(randomArt.id)
+        stubRandomArtist(randomArt)
         stubSetWallpaper(randomArt.id) {
             val settingWallpaper = artDetailViewModel.settingWallpaper.value
             assertEquals(true, settingWallpaper)
@@ -119,7 +119,7 @@ class ArtDetailViewModelTest {
     @Test
     fun `settingWallpaper LiveData is set back to false when setting wallpaper is complete`() {
         val randomArt = stubRandomArt()
-        stubRandomArtist(randomArt.id)
+        stubRandomArtist(randomArt)
 
         var settingWallpaper: Boolean?
 
@@ -140,7 +140,7 @@ class ArtDetailViewModelTest {
     @Test
     fun `when setWallpaper is called before art has been selected, it does not call setWallpaper on the WallpaperHelper`() {
         val randomArt = stubRandomArt()
-        stubRandomArtist(randomArt.id)
+        stubRandomArtist(randomArt)
 
         artDetailViewModel.setWallpaper()
 
@@ -154,9 +154,9 @@ class ArtDetailViewModelTest {
         return randomArt
     }
 
-    private fun stubRandomArtist(artId: String): Artist {
+    private fun stubRandomArtist(art: Art): Artist {
         val randomArtist = randomArtist()
-        whenever(mockRepository.getArtistForArtwork(artId))
+        whenever(mockRepository.getArtistForArtwork(art))
             .thenReturn(Single.just(randomArtist))
         return randomArtist
     }

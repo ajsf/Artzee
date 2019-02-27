@@ -14,6 +14,9 @@ interface ArtDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(artworks: List<ArtEntity>): Completable
 
+    @Query("UPDATE art SET artistId = :artistId WHERE id =:artId")
+    fun updateArtistIdForArt(artId: String, artistId: String)
+
     @Query("SELECT * FROM art")
     fun getAllArt(): DataSource.Factory<Int, ArtEntity>
 

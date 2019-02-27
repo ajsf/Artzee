@@ -11,7 +11,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 
 interface ArtRepository {
-    fun getArtistForArtwork(artworkId: String): Single<Artist>
+    fun getArtistForArtwork(art: Art): Single<Artist>
     fun getArtFeed(disposable: CompositeDisposable): Flowable<ArtPagedList>
     fun getArtById(artId: String): Single<Art>
 }
@@ -22,8 +22,12 @@ class ArtRepositoryImpl(
     private val scheduler: Scheduler
 ) : ArtRepository {
 
-    override fun getArtistForArtwork(artworkId: String): Single<Artist> = artApi
-        .getArtistForArtwork(artworkId)
+    override fun getArtistForArtwork(art: Art): Single<Artist> = if (art.artistId != null) artsyCache
+        .getArtistById(art.artistId)
+        .subscribeOn(scheduler)
+    else artApi
+        .getArtistForArtwork(art.id)
+        .doOnSuccess { artsyCache.insertArtist(it, art.id) }
         .subscribeOn(scheduler)
 
     override fun getArtFeed(disposable: CompositeDisposable): Flowable<ArtPagedList> = artsyCache

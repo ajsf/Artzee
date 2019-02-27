@@ -9,5 +9,6 @@ data class Art(
     val collectingInstitution: String,
     val thumbnail: String,
     val image: String,
-    val imageRectangle: String
+    val imageRectangle: String,
+    val artistId: String?
 )

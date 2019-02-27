@@ -4,28 +4,40 @@ import androidx.paging.DataSource
 import com.doublea.artzee.common.data.ArtPagedListBuilder
 import com.doublea.artzee.common.db.room.ArtDao
 import com.doublea.artzee.common.db.room.ArtEntity
+import com.doublea.artzee.common.db.room.ArtistDao
+import com.doublea.artzee.common.db.room.ArtistEntity
 import com.doublea.artzee.common.mapper.Mapper
 import com.doublea.artzee.common.model.Art
+import com.doublea.artzee.common.model.Artist
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 
 class ArtsyCache(
     private val artDao: ArtDao,
-    private val outputMapper: Mapper<ArtEntity, Art>,
-    private val pagedListBuilder: ArtPagedListBuilder
+    private val artOutputMapper: Mapper<ArtEntity, Art>,
+    private val pagedListBuilder: ArtPagedListBuilder,
+    private val artistDao: ArtistDao,
+    private val artistMapper: Mapper<ArtistEntity, Artist>
 ) {
 
-    fun insert(artList: List<ArtEntity>): Completable = artDao.insert(artList)
+    fun insertArtworks(artList: List<ArtEntity>): Completable = artDao.insert(artList)
 
     fun allArt(): DataSource.Factory<Int, Art> = artDao.getAllArt()
-        .map { outputMapper.toModel(it) }
+        .map { artOutputMapper.toModel(it) }
 
     fun getArtById(id: String): Single<Art> = artDao.getArtById(id)
-        .map { outputMapper.toModel(it) }
+        .map { artOutputMapper.toModel(it) }
 
     fun getArtFeed(disposable: CompositeDisposable) =
         pagedListBuilder.getPagedList(this, disposable)
 
+    fun getArtistById(id: String): Single<Artist> = artistDao.getArtistById(id)
+        .map { artistMapper.toModel(it) }
+
+    fun insertArtist(artist: Artist, artId: String) {
+        artistDao.insert(artistMapper.toDomain(artist))
+        artDao.updateArtistIdForArt(artId, artist.id)
+    }
 }
 

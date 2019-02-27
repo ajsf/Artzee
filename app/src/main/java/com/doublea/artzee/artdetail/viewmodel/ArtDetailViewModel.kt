@@ -23,20 +23,21 @@ class ArtDetailViewModel(
     val settingWallpaper: LiveData<Boolean>
         get() = _settingWallpaper
 
-    private var _artLiveData: LiveData<Art> = MutableLiveData()
+    private var _artLiveData: MutableLiveData<Art> = MutableLiveData()
 
     private var _artistLiveData: LiveData<Artist> = MutableLiveData()
 
     private var _settingWallpaper: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun selectArt(artId: String) {
-        _artLiveData = repository.getArtById(artId)
-            .toFlowable()
-            .toLiveData()
+        val art = repository.getArtById(artId).blockingGet()
+        _artLiveData.postValue(art)
+        selectArtist(art)
+    }
 
-        _artistLiveData = repository.getArtistForArtwork(artId)
-            .toFlowable()
-            .toLiveData()
+    private fun selectArtist(art: Art) {
+        _artistLiveData = repository
+            .getArtistForArtwork(art).toFlowable().toLiveData()
     }
 
     fun setWallpaper() {

@@ -3,6 +3,7 @@ package com.doublea.artzee.common.data
 import com.doublea.artzee.common.db.ArtsyCache
 import com.doublea.artzee.common.model.ArtPagedList
 import com.doublea.artzee.common.network.ArtApi
+import com.doublea.artzee.test.data.ArtDataFactory.randomArt
 import com.doublea.artzee.test.data.ArtDataFactory.randomArtist
 import com.doublea.artzee.test.data.TestDataFactory.randomString
 import com.nhaarman.mockitokotlin2.verify
@@ -66,30 +67,30 @@ class ArtRepositoryImplTest {
     }
 
     @Test
-    fun `when getArtistForArtwork is called, it calls getArtistForArtwork on the api with the artwork ID`() {
+    fun `when getArtistForArtwork is called and artistId is null, it calls getArtistForArtwork on the api with the artwork ID`() {
         val artist = randomArtist()
-        val randomId = randomString()
-        whenever(mockApi.getArtistForArtwork(randomId))
+        val art = randomArt(artistId = null)
+        whenever(mockApi.getArtistForArtwork(art.id))
             .thenReturn(Single.just(artist))
 
         repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
-        repository.getArtistForArtwork(randomId)
+        repository.getArtistForArtwork(art)
 
-        verify(mockApi).getArtistForArtwork(randomId)
+        verify(mockApi).getArtistForArtwork(art.id)
     }
 
     @Test
-    fun `when getArtistForArtwork is called it returns the artist returned by the api`() {
+    fun `when getArtistForArtwork is called and artistId is null, it returns the artist returned by the api`() {
         val artist = randomArtist()
-        val randomId = randomString()
+        val art = randomArt(artistId = null)
 
-        whenever(mockApi.getArtistForArtwork(randomId))
+        whenever(mockApi.getArtistForArtwork(art.id))
             .thenReturn(Single.just(artist))
 
         repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
 
         val testSubscriber = repository
-            .getArtistForArtwork(randomId)
+            .getArtistForArtwork(art)
             .test()
 
         scheduler.triggerActions()
@@ -97,4 +98,49 @@ class ArtRepositoryImplTest {
         testSubscriber.assertValue(artist)
     }
 
+    @Test
+    fun `when getArtistForArtwork is called and artistId is null, it calls insertArtist on the cache with artist returned by the api and the art ID`() {
+        val artist = randomArtist()
+        val art = randomArt(artistId = null)
+
+        whenever(mockApi.getArtistForArtwork(art.id))
+            .thenReturn(Single.just(artist))
+
+        repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
+        repository.getArtistForArtwork(art).test()
+        scheduler.triggerActions()
+
+        verify(mockCache).insertArtist(artist, art.id)
+    }
+
+    @Test
+    fun `when getArtistForArtwork is called and artistId is present, it calls getArtistById on the cache with the artistId`() {
+        val artist = randomArtist()
+        val art = randomArt(artistId = artist.id)
+        whenever(mockCache.getArtistById(artist.id))
+            .thenReturn(Single.just(artist))
+
+        repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
+        repository.getArtistForArtwork(art)
+
+        verify(mockCache).getArtistById(artist.id)
+    }
+
+    @Test
+    fun `when getArtistForArtwork is called and artistId is present, it returns the artist returned by the cache`() {
+        val artist = randomArtist()
+        val art = randomArt(artistId = artist.id)
+        whenever(mockCache.getArtistById(artist.id))
+            .thenReturn(Single.just(artist))
+
+        repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
+
+        val testSubscriber = repository
+            .getArtistForArtwork(art)
+            .test()
+
+        scheduler.triggerActions()
+
+        testSubscriber.assertValue(artist)
+    }
 }

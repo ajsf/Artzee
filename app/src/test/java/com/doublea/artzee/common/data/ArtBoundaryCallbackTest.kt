@@ -82,7 +82,7 @@ class ArtBoundaryCallbackTest {
 
         callOnZeroItemsLoaded()
 
-        verify(mockCache).insert(eq(randomEntities))
+        verify(mockCache).insertArtworks(eq(randomEntities))
     }
 
     @Test
@@ -159,7 +159,7 @@ class ArtBoundaryCallbackTest {
 
         callOnItemAtEndLoaded()
 
-        verify(mockCache).insert(eq(randomEntities))
+        verify(mockCache).insertArtworks(eq(randomEntities))
     }
 
     @Test
@@ -248,22 +248,22 @@ class ArtBoundaryCallbackTest {
     }
 
     private fun stubCacheError() {
-        whenever(mockCache.insert(any()))
+        whenever(mockCache.insertArtworks(any()))
             .thenReturn(Completable.error(Throwable()))
     }
 
     private fun stubCacheSuccess() {
-        whenever(mockCache.insert(any()))
+        whenever(mockCache.insertArtworks(any()))
             .thenReturn(Completable.complete())
     }
 
     private fun stubNoCacheResponse() {
-        whenever(mockCache.insert(any()))
+        whenever(mockCache.insertArtworks(any()))
             .thenReturn(Completable.never())
     }
 
     private fun stubCacheDelay(timeMs: Long) {
-        whenever(mockCache.insert(any()))
+        whenever(mockCache.insertArtworks(any()))
             .thenReturn(Completable.timer(timeMs, TimeUnit.MILLISECONDS, scheduler))
     }
 

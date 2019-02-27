@@ -40,7 +40,7 @@ class ArtPagedListBuilderTest {
     @Test
     fun `when getPagedList is called it sets the disposable on the callback`() {
         whenever(mockCache.allArt())
-            .thenReturn(TestDataSourceFactory(randomList(::randomArt)))
+            .thenReturn(TestDataSourceFactory(randomList({ randomArt() })))
 
         artPagedListBuilder.getPagedList(mockCache, disposable)
 
@@ -50,7 +50,7 @@ class ArtPagedListBuilderTest {
     @Test
     fun `when getPagedList is called it calls allArt on the cache`() {
         whenever(mockCache.allArt())
-            .thenReturn(TestDataSourceFactory(randomList(::randomArt)))
+            .thenReturn(TestDataSourceFactory(randomList({ randomArt() })))
 
         artPagedListBuilder.getPagedList(mockCache, disposable)
 
@@ -59,7 +59,7 @@ class ArtPagedListBuilderTest {
 
     @Test
     fun `when getPagedList is subscribed to, it returns the list from the cache`() {
-        val randomList = randomList(::randomArt)
+        val randomList = randomList({ randomArt() })
         whenever(mockCache.allArt())
             .thenReturn(TestDataSourceFactory(randomList))
 
@@ -69,4 +69,3 @@ class ArtPagedListBuilderTest {
         assertEquals(randomList, pagedList.list)
     }
 }
-
