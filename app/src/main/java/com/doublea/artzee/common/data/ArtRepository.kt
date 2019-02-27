@@ -6,12 +6,13 @@ import com.doublea.artzee.common.model.ArtPagedList
 import com.doublea.artzee.common.model.Artist
 import com.doublea.artzee.common.network.ArtApi
 import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 
 interface ArtRepository {
-    fun getArtistForArtwork(art: Art): Single<Artist>
+    fun getArtistForArtwork(art: Art): Maybe<Artist>
     fun getArtFeed(disposable: CompositeDisposable): Flowable<ArtPagedList>
     fun getArtById(artId: String): Single<Art>
 }
@@ -22,9 +23,9 @@ class ArtRepositoryImpl(
     private val scheduler: Scheduler
 ) : ArtRepository {
 
-    override fun getArtistForArtwork(art: Art): Single<Artist> = if (art.artistId != null) artsyCache
+    override fun getArtistForArtwork(art: Art): Maybe<Artist> = if (art.artistId != null) artsyCache
         .getArtistById(art.artistId)
-        .subscribeOn(scheduler)
+        .subscribeOn(scheduler).toMaybe()
     else artApi
         .getArtistForArtwork(art.id)
         .doOnSuccess { artsyCache.insertArtist(it, art.id) }

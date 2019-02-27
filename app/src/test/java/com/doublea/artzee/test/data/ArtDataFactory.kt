@@ -1,5 +1,6 @@
 package com.doublea.artzee.test.data
 
+import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewState
 import com.doublea.artzee.common.db.room.ArtEntity
 import com.doublea.artzee.common.db.room.ArtistEntity
 import com.doublea.artzee.common.model.Art
@@ -68,6 +69,14 @@ object ArtDataFactory {
         TestDataFactory.randomString(),
         TestDataFactory.randomStringList(),
         TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString(),
+        TestDataFactory.randomString()
+    )
+
+    fun randomViewState() = ArtDetailViewState(
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),

@@ -14,10 +14,9 @@ import androidx.lifecycle.Observer
 import com.doublea.artzee.R
 import com.doublea.artzee.artdetail.di.artDetailModule
 import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewModel
+import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewState
 import com.doublea.artzee.common.Constants.COLOR_ID_KEY
 import com.doublea.artzee.common.extensions.buildViewModel
-import com.doublea.artzee.common.model.Art
-import com.doublea.artzee.common.model.Artist
 import kotlinx.android.synthetic.main.fragment_art_detail_text.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -52,16 +51,6 @@ class ArtDetailTextFragment : Fragment(), KodeinAware {
         observeViewModel()
     }
 
-    private fun observeViewModel() {
-        viewModel.artLiveData.observe(this, Observer<Art> {
-            it?.let { art -> setArtDetails(art) }
-        })
-
-        viewModel.artistLiveData.observe(this, Observer<Artist> {
-            tv_artist.setTextAndVisibility(it?.name ?: "")
-        })
-    }
-
     override fun onCreateAnimator(transit: Int, enter: Boolean, nextAnim: Int): Animator? {
         return if (enter.not() && activity != null) {
             AnimatorInflater.loadAnimator(activity, nextAnim).apply {
@@ -72,21 +61,21 @@ class ArtDetailTextFragment : Fragment(), KodeinAware {
         } else super.onCreateAnimator(transit, enter, nextAnim)
     }
 
-    private fun setArtDetails(art: Art) {
-        val details = "${art.medium}, ${art.date}"
-        tv_title.text = art.title
-        tv_details.text = details
-        tv_details2.setTextAndVisibility(
-            if (art.collectingInstitution.isBlank()) {
-                ""
-            } else {
-                "Collecting institution: ${art.collectingInstitution}"
-            }
-        )
+    private fun observeViewModel() {
+        viewModel.viewState.observe(this, Observer<ArtDetailViewState> {
+            it?.let { viewState -> render(viewState) }
+        })
     }
 
-    private fun TextView.setTextAndVisibility(value: String) {
-        if (value.isBlank()) {
+    private fun render(viewState: ArtDetailViewState) {
+        tv_title.text = viewState.title
+        tv_details.text = viewState.details
+        tv_artist.setTextAndVisibility(viewState.artistName)
+        tv_details2.setTextAndVisibility(viewState.details2)
+    }
+
+    private fun TextView.setTextAndVisibility(value: String?) {
+        if (value.isNullOrBlank()) {
             visibility = View.GONE
         } else {
             text = value.trim()

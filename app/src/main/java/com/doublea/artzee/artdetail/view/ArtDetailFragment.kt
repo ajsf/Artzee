@@ -5,24 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.transition.*
 import com.doublea.artzee.R
 import com.doublea.artzee.artdetail.di.artDetailModule
 import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewModel
+import com.doublea.artzee.artdetail.viewmodel.ArtDetailViewState
 import com.doublea.artzee.common.Constants.ART_ID_KEY
 import com.doublea.artzee.common.Constants.COLOR_ID_KEY
 import com.doublea.artzee.common.Constants.TRANSITION_TIME
 import com.doublea.artzee.common.extensions.buildViewModel
 import com.doublea.artzee.common.extensions.inflate
 import com.doublea.artzee.common.extensions.loadImage
-import com.doublea.artzee.common.model.Art
 import kotlinx.android.synthetic.main.fragment_art_detail.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
-
 
 class ArtDetailFragment : Fragment(), KodeinAware {
 
@@ -68,21 +68,29 @@ class ArtDetailFragment : Fragment(), KodeinAware {
     }
 
     private fun observeViewModel() {
-        viewModel.artLiveData.observe(this, Observer<Art> {
-            it?.let { art -> setArtDetails(art) }
+        viewModel.viewState.observe(this, Observer<ArtDetailViewState> {
+            it?.let { viewState -> render(viewState) }
         })
-
-        viewModel.settingWallpaper.observe(this, Observer<Boolean> {
-            if (it) {
-                btn_set_wallpaper.visibility = View.GONE
-                progress_set_wallpaper.visibility = View.VISIBLE
-            } else {
-                progress_set_wallpaper?.visibility = View.GONE
-                btn_set_wallpaper?.visibility = View.VISIBLE
-            }
-        })
-
         btn_set_wallpaper.setOnClickListener { viewModel.setWallpaper() }
+    }
+
+    private fun render(viewState: ArtDetailViewState) {
+        val imageUrl = viewState.imageUrl ?: ""
+        if (imageUrl.isNotEmpty()) {
+            iv_art.loadImage(imageUrl) {
+                iv_art.doOnPreDraw {
+                    startPostponedEnterTransition()
+                }
+                launchTextFragment()
+            }
+        }
+        if (viewState.settingWallpaper) {
+            btn_set_wallpaper?.visibility = View.GONE
+            progress_set_wallpaper?.visibility = View.VISIBLE
+        } else {
+            progress_set_wallpaper?.visibility = View.GONE
+            btn_set_wallpaper?.visibility = View.VISIBLE
+        }
     }
 
     private fun setupTransition() {
@@ -91,13 +99,6 @@ class ArtDetailFragment : Fragment(), KodeinAware {
         iv_art.transitionName = artId
         enterTransition = Fade().apply { duration = TRANSITION_TIME + 100 }
         returnTransition = Fade().apply { duration = TRANSITION_TIME / 2 }
-    }
-
-    private fun setArtDetails(art: Art) {
-        iv_art.loadImage(art.imageRectangle) {
-            startPostponedEnterTransition()
-            launchTextFragment()
-        }
     }
 
     private fun launchTextFragment() = fragmentManager?.let {

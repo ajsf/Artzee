@@ -3,48 +3,62 @@ package com.doublea.artzee.artdetail.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.toLiveData
 import com.doublea.artzee.artdetail.utils.WallpaperHelper
 import com.doublea.artzee.common.data.ArtRepository
+import com.doublea.artzee.common.mapper.Mapper
 import com.doublea.artzee.common.model.Art
-import com.doublea.artzee.common.model.Artist
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.subscribeBy
 
 class ArtDetailViewModel(
     private val repository: ArtRepository,
-    private val wallpaperHelper: WallpaperHelper
+    private val wallpaperHelper: WallpaperHelper,
+    private val artToViewStateMapper: Mapper<Art, ArtDetailViewState>,
+    private val uiScheduler: Scheduler = AndroidSchedulers.mainThread()
 ) : ViewModel() {
 
-    val artLiveData: LiveData<Art>
-        get() = _artLiveData
+    val viewState: LiveData<ArtDetailViewState>
+        get() = _viewState
 
-    val artistLiveData: LiveData<Artist>
-        get() = _artistLiveData
+    private val _viewState: MutableLiveData<ArtDetailViewState> = MutableLiveData()
 
-    val settingWallpaper: LiveData<Boolean>
-        get() = _settingWallpaper
+    private fun currentViewState(): ArtDetailViewState = _viewState.value!!
 
-    private var _artLiveData: MutableLiveData<Art> = MutableLiveData()
+    private val disposable = CompositeDisposable()
 
-    private var _artistLiveData: LiveData<Artist> = MutableLiveData()
+    init {
+        _viewState.value = ArtDetailViewState()
+    }
 
-    private var _settingWallpaper: MutableLiveData<Boolean> = MutableLiveData(false)
+    override fun onCleared() {
+        super.onCleared()
+        if (disposable.isDisposed.not()) disposable.dispose()
+    }
 
     fun selectArt(artId: String) {
-        val art = repository.getArtById(artId).blockingGet()
-        _artLiveData.postValue(art)
-        selectArtist(art)
+        repository.getArtById(artId)
+            .observeOn(uiScheduler)
+            .subscribeBy {
+                _viewState.value = artToViewStateMapper.toModel(it)
+                selectArtist(it)
+            }
     }
 
     private fun selectArtist(art: Art) {
-        _artistLiveData = repository
-            .getArtistForArtwork(art).toFlowable().toLiveData()
+        repository.getArtistForArtwork(art)
+            .observeOn(uiScheduler)
+            .subscribeBy {
+                _viewState.value = currentViewState().copy(artistName = it.name)
+            }
     }
 
     fun setWallpaper() {
-        artLiveData.value?.let {
-            _settingWallpaper.postValue(true)
-            wallpaperHelper.setWallpaper(it.image) {
-                _settingWallpaper.postValue(false)
+        currentViewState().wallpaperImage?.let {
+            _viewState.value = currentViewState().copy(settingWallpaper = true)
+            wallpaperHelper.setWallpaper(it) {
+                _viewState.value = currentViewState().copy(settingWallpaper = false)
             }
         }
     }

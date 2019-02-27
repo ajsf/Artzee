@@ -5,10 +5,10 @@ import com.doublea.artzee.common.model.ArtPagedList
 import com.doublea.artzee.common.network.ArtApi
 import com.doublea.artzee.test.data.ArtDataFactory.randomArt
 import com.doublea.artzee.test.data.ArtDataFactory.randomArtist
-import com.doublea.artzee.test.data.TestDataFactory.randomString
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.TestScheduler
@@ -71,7 +71,7 @@ class ArtRepositoryImplTest {
         val artist = randomArtist()
         val art = randomArt(artistId = null)
         whenever(mockApi.getArtistForArtwork(art.id))
-            .thenReturn(Single.just(artist))
+            .thenReturn(Maybe.just(artist))
 
         repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
         repository.getArtistForArtwork(art)
@@ -85,7 +85,7 @@ class ArtRepositoryImplTest {
         val art = randomArt(artistId = null)
 
         whenever(mockApi.getArtistForArtwork(art.id))
-            .thenReturn(Single.just(artist))
+            .thenReturn(Maybe.just(artist))
 
         repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
 
@@ -104,7 +104,7 @@ class ArtRepositoryImplTest {
         val art = randomArt(artistId = null)
 
         whenever(mockApi.getArtistForArtwork(art.id))
-            .thenReturn(Single.just(artist))
+            .thenReturn(Maybe.just(artist))
 
         repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
         repository.getArtistForArtwork(art).test()

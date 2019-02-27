@@ -38,7 +38,8 @@ internal class ArtApiTest {
     fun `when getArt is called without a cursor, it calls getArt on the artsy service`() {
         val mockResponse = ArtsyApiDataFactory.randomArtworkWrapper()
         whenever(mockService.getArt()).thenReturn(
-                Single.just(mockResponse))
+            Single.just(mockResponse)
+        )
 
         api.getArt().test()
 
@@ -49,7 +50,8 @@ internal class ArtApiTest {
     fun `when getArt is called with a blank cursor, it calls getArt on the artsy service`() {
         val mockResponse = ArtsyApiDataFactory.randomArtworkWrapper()
         whenever(mockService.getArt()).thenReturn(
-                Single.just(mockResponse))
+            Single.just(mockResponse)
+        )
 
         api.getArt(" ").test()
 
@@ -61,7 +63,8 @@ internal class ArtApiTest {
         val mockResponse = ArtsyApiDataFactory.randomArtworkWrapper()
 
         whenever(mockService.getArtByCursor(any(), any())).thenReturn(
-                Single.just(mockResponse))
+            Single.just(mockResponse)
+        )
 
         val cursor = TestDataFactory.randomString()
 
@@ -75,7 +78,8 @@ internal class ArtApiTest {
         val mockResponse = ArtsyApiDataFactory.randomArtworkWrapper()
 
         whenever(mockService.getArt()).thenReturn(
-                Single.just(mockResponse))
+            Single.just(mockResponse)
+        )
 
         api.getArt().test()
 
@@ -88,7 +92,8 @@ internal class ArtApiTest {
         val mockResponse = ArtDataFactory.randomApiResponse()
 
         whenever(mockService.getArt(any())).thenReturn(
-                Single.just(ArtsyApiDataFactory.randomArtworkWrapper()))
+            Single.just(ArtsyApiDataFactory.randomArtworkWrapper())
+        )
 
         whenever(mockArtMapper.toModel(any())).thenReturn(mockResponse)
 
@@ -102,7 +107,8 @@ internal class ArtApiTest {
         val mockResponse = ArtsyApiDataFactory.randomArtistsWrapper()
 
         whenever(mockService.getArtistsByArtworkId(any())).thenReturn(
-                Single.just(mockResponse))
+            Single.just(mockResponse)
+        )
 
         api.getArtistForArtwork(TestDataFactory.randomString()).test()
 
@@ -114,7 +120,8 @@ internal class ArtApiTest {
         val mockResponse = ArtsyApiDataFactory.randomArtistsWrapper()
 
         whenever(mockService.getArtistsByArtworkId(any())).thenReturn(
-                Single.just(mockResponse))
+            Single.just(mockResponse)
+        )
 
         val randomId = TestDataFactory.randomString()
 
@@ -128,7 +135,8 @@ internal class ArtApiTest {
         val mockResponse = ArtsyApiDataFactory.randomArtistsWrapper()
 
         whenever(mockService.getArtistsByArtworkId(any())).thenReturn(
-                Single.just(mockResponse))
+            Single.just(mockResponse)
+        )
 
         val mockArtist = ArtDataFactory.randomArtist()
 
