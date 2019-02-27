@@ -1,5 +1,6 @@
 package com.doublea.artzee.browse.view
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -41,10 +42,12 @@ class BrowseArtFragment : Fragment(), KodeinAware {
 
     private val adapterClickLister: AdapterClickLister = { artId, position, colorId ->
         viewModel.currentPosition = position
-        if (position == 0) artwork_list.fling(0, 200)
+        if (position == 0) artwork_list.fling(0, 220)
         val imageView = getImageViewForPosition(position)
         navigator.viewArtDetail(artId, listOf(imageView), colorId)
     }
+
+    private var columnCount = 2
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,32 +60,39 @@ class BrowseArtFragment : Fragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        initRecyclerView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initRecyclerView()
         val adapter = initAdapter(viewModel.currentPosition)
         observeViewModel(adapter)
     }
 
     private fun setupTransitions() {
         postponeEnterTransition()
-        exitTransition = Explode().apply { duration = TRANSITION_TIME / 2 }
+        val transition = Explode().apply { duration = TRANSITION_TIME / 2 }
+        exitTransition = transition
         allowEnterTransitionOverlap = true
     }
 
     private fun initRecyclerView() = artwork_list.apply {
         setHasFixedSize(true)
-        val gridLayout = GridLayoutManager(context, 2)
+        setColumnCount()
+        val gridLayout = GridLayoutManager(context, columnCount)
         layoutManager = gridLayout
         clearOnScrollListeners()
     }
 
+    private fun setColumnCount() {
+        val orientation = resources.configuration.orientation
+        columnCount = if (orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
+    }
+
     private fun initAdapter(currentPosition: Int): ArtworkAdapter {
-        val adapter = ArtworkAdapter(this, currentPosition)
+        val adapter = ArtworkAdapter(this, currentPosition, columnCount)
         adapter.clickListener = adapterClickLister
         artwork_list.adapter = adapter
-        if (currentPosition == 0) artwork_list.fling(0, -500)
+        if (currentPosition == 0) artwork_list.fling(0, -170)
         return adapter
     }
 

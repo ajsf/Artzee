@@ -47,7 +47,7 @@ class ArtDetailTextFragment : Fragment(), KodeinAware {
         val colorId = arguments?.getInt(COLOR_ID_KEY) ?: R.color.primaryDarkColor
         card_view.setBackgroundColor(colorId)
         if (savedInstanceState == null) {
-            card_view.translationY = -1000f
+            card_view.translationY = -1200f
         }
         observeViewModel()
     }

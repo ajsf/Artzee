@@ -20,7 +20,7 @@ typealias AdapterClickLister = (String, Int, Int) -> Unit
 class ArtworkAdapter(
     private val fragment: BrowseArtFragment,
     private val currentPosition: Int,
-    columnCount: Int = 2
+    private val columnCount: Int
 ) : PagedListAdapter<Art, RecyclerView.ViewHolder>(ArtDiffCallback) {
 
     private var imageSize: Int = 0
@@ -30,10 +30,14 @@ class ArtworkAdapter(
     lateinit var clickListener: AdapterClickLister
 
     init {
+        setImageSize()
+        setHasStableIds(true)
+    }
+
+    private fun setImageSize() {
         val displayMetrics = DisplayMetrics()
         fragment.activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-        imageSize = (displayMetrics.widthPixels / columnCount)
-        setHasStableIds(true)
+        imageSize = (displayMetrics.widthPixels) / columnCount
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
