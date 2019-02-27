@@ -5,12 +5,14 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.doublea.artzee.browse.view.BrowseArtFragment
+import com.doublea.artzee.common.data.PreferencesHelper
 import com.doublea.artzee.common.di.activityModule
 import com.doublea.artzee.common.extensions.launchFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
+import org.kodein.di.generic.instance
 
 class MainActivity : AppCompatActivity(), KodeinAware {
 
@@ -21,12 +23,26 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         import(activityModule(this@MainActivity))
     }
 
+    private val prefs: PreferencesHelper by instance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        launchFragments(savedInstanceState)
+    }
+
+    private fun launchFragments(savedInstanceState: Bundle?) {
+        checkFirstRun()
         if (savedInstanceState == null) {
-            BrowseArtFragment().launchFragment(supportFragmentManager, false, BrowseArtFragment.TAG)
+            val browseFragment = BrowseArtFragment()
+            browseFragment.launchFragment(supportFragmentManager, false, BrowseArtFragment.TAG)
+        }
+    }
+
+    private fun checkFirstRun() {
+        if (prefs.firstRunTime(System.currentTimeMillis()) == -1L) {
+            WelcomeFragment().show(supportFragmentManager, "Welcome")
         }
     }
 

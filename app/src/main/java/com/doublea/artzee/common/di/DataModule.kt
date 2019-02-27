@@ -18,7 +18,7 @@ fun dataModule() = Kodein.Module("dataModule") {
     import(networkModule())
     bind<Scheduler>() with provider { Schedulers.io() }
     bind<ArtRepository>() with singleton { ArtRepositoryImpl(instance(), instance(), instance()) }
-    bind<PreferencesHelper>() with provider { SharedPrefsHelper(instance()) }
+    bind<PreferencesHelper>() with singleton { SharedPrefsHelper(instance()) }
     bind<ArtPagedListBuilder>() with provider { ArtPagedListBuilder(instance()) }
     bind<Mapper<ArtApiResponse, List<ArtEntity>>>() with provider { ResponseToEntityMapper() }
     bind<ArtBoundaryCallback>() with provider {
