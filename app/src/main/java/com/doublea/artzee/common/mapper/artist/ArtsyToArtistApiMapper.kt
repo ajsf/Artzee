@@ -1,14 +1,16 @@
-package com.doublea.artzee.common.mapper
+package com.doublea.artzee.common.mapper.artist
 
+import com.doublea.artzee.common.mapper.Mapper
 import com.doublea.artzee.common.model.Artist
+import com.doublea.artzee.common.network.ArtistApiResponse
 import com.doublea.artzee.common.network.ArtsyArtistResponse
 import com.doublea.artzee.common.network.ArtsyArtistsWrapper
 
-class ArtsyToArtistMapper : Mapper<ArtsyArtistsWrapper, Artist> {
+class ArtsyToArtistApiMapper : Mapper<ArtsyArtistsWrapper, ArtistApiResponse> {
 
-    override fun toModel(domain: ArtsyArtistsWrapper): Artist = domain
+    override fun toModel(domain: ArtsyArtistsWrapper): ArtistApiResponse = domain
         ._embedded.artists
-        .map { it.toArtist() }
+        .map { ArtistApiResponse(it.toArtist()) }
         .first()
 
     private fun ArtsyArtistResponse.toArtist() = Artist(

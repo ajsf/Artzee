@@ -10,7 +10,7 @@ class ViewModelFactory(private val injector: DKodein) : ViewModelProvider.Factor
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
         return injector
-                .instanceOrNull<ViewModel>(tag = modelClass.simpleName) as T?
-                ?: modelClass.newInstance()
+            .instanceOrNull<ViewModel>(tag = modelClass.simpleName) as T?
+            ?: modelClass.newInstance()
     }
 }

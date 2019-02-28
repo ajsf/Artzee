@@ -10,7 +10,7 @@ import com.doublea.artzee.common.network.ArtApiResponse
 object ArtDataFactory {
 
     fun randomApiResponse() = ArtApiResponse(
-        TestDataFactory.randomList(ArtsyApiDataFactory::randomArtworkResponse),
+        TestDataFactory.randomList({ ArtDataFactory.randomArt() }),
         TestDataFactory.randomString()
     )
 
@@ -31,10 +31,6 @@ object ArtDataFactory {
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),
-        TestDataFactory.randomString(),
-        TestDataFactory.randomString(),
-        TestDataFactory.randomString(),
-        TestDataFactory.randomStringList(),
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),
         TestDataFactory.randomString(),

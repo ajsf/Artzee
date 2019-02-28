@@ -49,8 +49,12 @@ class ArtDetailViewModel(
     private fun selectArtist(art: Art) {
         repository.getArtistForArtwork(art)
             .observeOn(uiScheduler)
+            .filter { it.data != null }
+            .take(1)
             .subscribeBy {
-                _viewState.value = currentViewState().copy(artistName = it.name)
+                it?.data?.let { artist ->
+                    _viewState.value = currentViewState().copy(artistName = artist.name)
+                }
             }
     }
 

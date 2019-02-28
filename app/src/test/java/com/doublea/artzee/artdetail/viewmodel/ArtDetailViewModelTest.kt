@@ -3,6 +3,7 @@ package com.doublea.artzee.artdetail.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.doublea.artzee.artdetail.utils.WallpaperHelper
 import com.doublea.artzee.common.data.ArtRepository
+import com.doublea.artzee.common.data.ArtRepositoryResponse
 import com.doublea.artzee.common.mapper.Mapper
 import com.doublea.artzee.common.model.Art
 import com.doublea.artzee.common.model.Artist
@@ -10,7 +11,7 @@ import com.doublea.artzee.test.data.ArtDataFactory.randomArt
 import com.doublea.artzee.test.data.ArtDataFactory.randomArtist
 import com.doublea.artzee.test.data.ArtDataFactory.randomViewState
 import com.nhaarman.mockitokotlin2.*
-import io.reactivex.Maybe
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.TestScheduler
 import org.junit.Assert.assertEquals
@@ -71,7 +72,7 @@ class ArtDetailViewModelTest {
     @Test
     fun `when selectArt is called, it calls toModel on the mapper with the art from the repository`() {
         whenever(mockRepository.getArtistForArtwork(any()))
-            .thenReturn(Maybe.never())
+            .thenReturn(Flowable.never())
         val randomArt = stubRandomArt()
         stubRandomViewState(randomArt)
 
@@ -84,7 +85,7 @@ class ArtDetailViewModelTest {
     @Test
     fun `when selectArt is called, and the repository has returned art, but not an artist, it updates the viewState with the output from the mapper`() {
         whenever(mockRepository.getArtistForArtwork(any()))
-            .thenReturn(Maybe.never())
+            .thenReturn(Flowable.never())
         val randomArt = stubRandomArt()
         val randomViewState = stubRandomViewState(randomArt)
 
@@ -197,8 +198,9 @@ class ArtDetailViewModelTest {
 
     private fun stubRandomArtist(art: Art): Artist {
         val randomArtist = randomArtist()
+        val response = ArtRepositoryResponse(data = randomArtist)
         whenever(mockRepository.getArtistForArtwork(art))
-            .thenReturn(Maybe.just(randomArtist))
+            .thenReturn(Flowable.just(response))
         return randomArtist
     }
 

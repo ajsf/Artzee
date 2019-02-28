@@ -3,12 +3,12 @@ package com.doublea.artzee.common.data
 import com.doublea.artzee.common.db.ArtsyCache
 import com.doublea.artzee.common.model.ArtPagedList
 import com.doublea.artzee.common.network.ArtApi
+import com.doublea.artzee.common.network.ArtistApiResponse
 import com.doublea.artzee.test.data.ArtDataFactory.randomArt
 import com.doublea.artzee.test.data.ArtDataFactory.randomArtist
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Flowable
-import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.TestScheduler
@@ -70,8 +70,10 @@ class ArtRepositoryImplTest {
     fun `when getArtistForArtwork is called and artistId is null, it calls getArtistForArtwork on the api with the artwork ID`() {
         val artist = randomArtist()
         val art = randomArt(artistId = null)
+        val response = ArtistApiResponse(artist)
+
         whenever(mockApi.getArtistForArtwork(art.id))
-            .thenReturn(Maybe.just(artist))
+            .thenReturn(Flowable.just(response))
 
         repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
         repository.getArtistForArtwork(art)
@@ -84,8 +86,10 @@ class ArtRepositoryImplTest {
         val artist = randomArtist()
         val art = randomArt(artistId = null)
 
+        val response = ArtistApiResponse(artist)
+
         whenever(mockApi.getArtistForArtwork(art.id))
-            .thenReturn(Maybe.just(artist))
+            .thenReturn(Flowable.just(response))
 
         repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
 
@@ -95,16 +99,19 @@ class ArtRepositoryImplTest {
 
         scheduler.triggerActions()
 
-        testSubscriber.assertValue(artist)
+        val expectedResponse = ArtRepositoryResponse(artist)
+
+        testSubscriber.assertValue(expectedResponse)
     }
 
     @Test
     fun `when getArtistForArtwork is called and artistId is null, it calls insertArtist on the cache with artist returned by the api and the art ID`() {
         val artist = randomArtist()
         val art = randomArt(artistId = null)
+        val response = ArtistApiResponse(artist)
 
         whenever(mockApi.getArtistForArtwork(art.id))
-            .thenReturn(Maybe.just(artist))
+            .thenReturn(Flowable.just(response))
 
         repository = ArtRepositoryImpl(mockApi, mockCache, scheduler)
         repository.getArtistForArtwork(art).test()
@@ -141,6 +148,8 @@ class ArtRepositoryImplTest {
 
         scheduler.triggerActions()
 
-        testSubscriber.assertValue(artist)
+        val expectedResponse = ArtRepositoryResponse(artist)
+
+        testSubscriber.assertValue(expectedResponse)
     }
 }

@@ -18,35 +18,35 @@ interface ArtsyService {
 
     @POST("tokens/xapp_token")
     fun getToken(
-            @Query("client_id") clientId: String,
-            @Query("client_secret") clientSecret: String
+        @Query("client_id") clientId: String,
+        @Query("client_secret") clientSecret: String
     ): Single<ArtsyToken>
 
     @GET("artworks")
     fun getArt(
-            @Query("size") size: Int = 10
+        @Query("size") size: Int = 10
     ): Single<ArtsyArtworkWrapper>
 
     @GET("artworks")
     fun getArtByCursor(
-            @Query("cursor", encoded = true) cursor: String,
-            @Query("size") size: Int = 10
+        @Query("cursor", encoded = true) cursor: String,
+        @Query("size") size: Int = 10
     ): Single<ArtsyArtworkWrapper>
 
     @GET("artists")
     fun getArtists(
-            @Query("size") size: Int = 10
+        @Query("size") size: Int = 10
     ): Single<ArtsyArtistsWrapper>
 
     @GET("artists")
     fun getArtistsByCursor(
-            @Query("cursor", encoded = true) cursor: String,
-            @Query("size") size: Int = 10
+        @Query("cursor", encoded = true) cursor: String,
+        @Query("size") size: Int = 10
     ): Single<ArtsyArtistsWrapper>
 
     @GET("artists")
     fun getArtistsByArtworkId(
-            @Query("artwork_id", encoded = true) id: String
+        @Query("artwork_id", encoded = true) id: String
     ): Single<ArtsyArtistsWrapper>
 
     companion object {
@@ -58,20 +58,20 @@ interface ArtsyService {
             val authInterceptor = AuthenticationInterceptor()
 
             val client = OkHttpClient.Builder()
-                    .connectTimeout(30, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS)
-                    .writeTimeout(60, TimeUnit.SECONDS)
-                    .addInterceptor(authInterceptor)
-                    .authenticator(authInterceptor)
-                    .addInterceptor(loggingInterceptor)
-                    .build()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .addInterceptor(authInterceptor)
+                .authenticator(authInterceptor)
+                .addInterceptor(loggingInterceptor)
+                .build()
 
             val retrofit = Retrofit.Builder()
-                    .client(client)
-                    .baseUrl(apiBaseUrl)
-                    .addConverterFactory(MoshiConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build().create(ArtsyService::class.java)
+                .client(client)
+                .baseUrl(apiBaseUrl)
+                .addConverterFactory(MoshiConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build().create(ArtsyService::class.java)
             authInterceptor.service = retrofit
             retrofit
         }

@@ -5,7 +5,7 @@ data class Artist(
         val name: String,
         val birthday: String,
         val deathday: String,
-        val hometown: String,
+        val hometown: String?,
         val nationality: String,
         val image_versions: List<String>?,
         val thumbnail: String?,

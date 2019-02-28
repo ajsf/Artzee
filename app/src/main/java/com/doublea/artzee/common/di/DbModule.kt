@@ -2,9 +2,9 @@ package com.doublea.artzee.common.di
 
 import com.doublea.artzee.common.db.ArtsyCache
 import com.doublea.artzee.common.db.room.*
-import com.doublea.artzee.common.mapper.ArtEntityToArtMapper
-import com.doublea.artzee.common.mapper.ArtistEntityToArtistMapper
 import com.doublea.artzee.common.mapper.Mapper
+import com.doublea.artzee.common.mapper.art.ArtEntityToArtMapper
+import com.doublea.artzee.common.mapper.artist.ArtistEntityToArtistMapper
 import com.doublea.artzee.common.model.Art
 import com.doublea.artzee.common.model.Artist
 import org.kodein.di.Kodein

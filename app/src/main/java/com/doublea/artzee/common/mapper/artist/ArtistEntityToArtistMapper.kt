@@ -1,6 +1,7 @@
-package com.doublea.artzee.common.mapper
+package com.doublea.artzee.common.mapper.artist
 
 import com.doublea.artzee.common.db.room.ArtistEntity
+import com.doublea.artzee.common.mapper.Mapper
 import com.doublea.artzee.common.model.Artist
 
 class ArtistEntityToArtistMapper : Mapper<ArtistEntity, Artist> {

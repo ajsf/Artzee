@@ -12,14 +12,10 @@ data class ArtEntity(
     val medium: String?,
     val date: String?,
     val collectingInstitution: String,
-    val image_versions: List<String>,
     val thumbnail: String,
     val image: String,
-    val partner: String?,
-    val genes: String?,
-    val artists: String?,
-    val similarArtworks: String?,
-    val artistId: String? = null
+    val imageRectangle: String,
+    val artistId: String?
 )
 
 

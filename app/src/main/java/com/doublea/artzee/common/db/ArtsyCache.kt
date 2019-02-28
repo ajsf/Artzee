@@ -15,22 +15,23 @@ import io.reactivex.disposables.CompositeDisposable
 
 class ArtsyCache(
     private val artDao: ArtDao,
-    private val artOutputMapper: Mapper<ArtEntity, Art>,
+    private val artMapper: Mapper<ArtEntity, Art>,
     private val pagedListBuilder: ArtPagedListBuilder,
     private val artistDao: ArtistDao,
     private val artistMapper: Mapper<ArtistEntity, Artist>
 ) {
 
-    fun insertArtworks(artList: List<ArtEntity>): Completable = artDao.insert(artList)
+    fun insertArtworks(artList: List<Art>): Completable = artDao
+        .insert(artList.map { artMapper.toDomain(it) })
 
     fun allArt(): DataSource.Factory<Int, Art> = artDao.getAllArt()
-        .map { artOutputMapper.toModel(it) }
+        .map { artMapper.toModel(it) }
 
     fun getArtById(id: String): Single<Art> = artDao.getArtById(id)
-        .map { artOutputMapper.toModel(it) }
+        .map { artMapper.toModel(it) }
 
-    fun getArtFeed(disposable: CompositeDisposable) =
-        pagedListBuilder.getPagedList(this, disposable)
+    fun getArtFeed(disposable: CompositeDisposable) = pagedListBuilder
+        .getPagedList(this, disposable)
 
     fun getArtistById(id: String): Single<Artist> = artistDao.getArtistById(id)
         .map { artistMapper.toModel(it) }
