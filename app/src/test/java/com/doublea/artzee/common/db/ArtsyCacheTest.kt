@@ -58,12 +58,31 @@ class ArtsyCacheTest {
     }
 
     @Test
-    fun `when insertArtworks is called, it calls insert on the art dao`() {
+    fun `when insertArtworks is called, it calls toDomain on the art mapper for each item in the art list`() {
         val artList = randomList({ randomArt() })
+
+        val artEntityList = artList.map { randomArtEntity() }
+
+        artList.forEachIndexed { index, art -> whenever(mockArtMapper.toDomain(art)).thenReturn(artEntityList[index]) }
 
         cache.insertArtworks(artList)
 
-        //verify(mockArtDao).insert(artList)
+        artList.onEach {
+            verify(mockArtMapper).toDomain(it)
+        }
+    }
+
+    @Test
+    fun `when insertArtworks is called, it calls insert on the art dao with the mapped art entity list`() {
+        val artList = randomList({ randomArt() })
+
+        val artEntityList = artList.map { randomArtEntity() }
+
+        artList.forEachIndexed { index, art -> whenever(mockArtMapper.toDomain(art)).thenReturn(artEntityList[index]) }
+
+        cache.insertArtworks(artList)
+
+        verify(mockArtDao).insert(artEntityList)
     }
 
     @Test
@@ -84,13 +103,13 @@ class ArtsyCacheTest {
         whenever(mockArtDao.getArtById(artId)).thenReturn(Single.just(artEntity))
         whenever(mockArtMapper.toModel(artEntity)).thenReturn(art)
 
-        cache.getArtById(artId).test()
+        cache.getArtById(artId)
 
         verify(mockArtDao).getArtById(artId)
     }
 
     @Test
-    fun `when getArtById is called, it calls toModel on the art mapper with the art returned by the dao`() {
+    fun `when getArtById is subscribed to, it calls toModel on the art mapper with the art returned by the dao`() {
         val artId = randomString()
         val artEntity = randomArtEntity()
         val art = randomArt()
@@ -104,7 +123,7 @@ class ArtsyCacheTest {
     }
 
     @Test
-    fun `when getArtById is called, it returns the mapped art`() {
+    fun `when getArtById is subscribed to, it returns the mapped art`() {
         val artId = randomString()
         val artEntity = randomArtEntity()
         val art = randomArt()

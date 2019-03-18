@@ -1,6 +1,6 @@
 # Artzee
 
-An Android app written in Kotlin to browse the [Artsy](https://www.artsy.net/) public API, and set the phone wallpaper. This was a project to experiment with some of the newer Android libraries, such as Anko, Android Architecture Components, Android Paging Library for continuous scrolling, as well as Retrofit for networking and a light tough of RxJava/RxKotlin.
+An Android app written in Kotlin to browse the [Artsy](https://www.artsy.net/) public API, and set phone wallpaper. This was a project to experiment with the Android Architecture Components. It uses Room and the Paging Library for continuous scrolling and caching of network data, and LiveData for UI updates, as well as Retrofit for networking and a light touch of RxJava/RxKotlin.
 
 ![Screenshot](./.github/screenshot1.png?raw=true)&nbsp;&nbsp;&nbsp;&nbsp;![Screenshot](./.github/screenshot2.png?raw=true)
 
