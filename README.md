@@ -7,6 +7,7 @@ An Android app written in Kotlin to browse the [Artsy](https://www.artsy.net/) p
 ![Screenshot](./.github/screenshot2.png)&nbsp;&nbsp;&nbsp;&nbsp;![Screenshot](./.github/Transition.gif)
 
 ![Screenshot](./.github/Set.gif)
+<br/><br/>
 ![Screenshot](./.github/screenshot4.png)
 ![Screenshot](./.github/screenshot5.png)
 
