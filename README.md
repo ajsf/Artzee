@@ -2,7 +2,13 @@
 
 An Android app written in Kotlin to browse the [Artsy](https://www.artsy.net/) public API, and set phone wallpaper. This was a project to experiment with the Android Architecture Components. It uses Room and the Paging Library for continuous scrolling and caching of network data, and LiveData for UI updates, as well as Retrofit for networking and a light touch of RxJava/RxKotlin.
 
-![Screenshot](./.github/screenshot1.png?raw=true)&nbsp;&nbsp;&nbsp;&nbsp;![Screenshot](./.github/screenshot2.png?raw=true)
+![Screenshot](./.github/screenshot1.png)&nbsp;&nbsp;&nbsp;&nbsp;![Screenshot](./.github/Scroll.gif)
+
+![Screenshot](./.github/screenshot2.png)&nbsp;&nbsp;&nbsp;&nbsp;![Screenshot](./.github/Transition.gif)
+
+![Screenshot](./.github/Set.gif)
+![Screenshot](./.github/screenshot4.png)
+![Screenshot](./.github/screenshot5.png)
 
 ## Getting Started
 
@@ -19,7 +25,7 @@ artsyClientSecret=Enter_Client_Secret
 
 * [Kotlin](https://kotlinlang.org/) - Kotlin programing language
 * [Anko](https://github.com/Kotlin/anko) - Kotlin extensions and utilities for Android
-* [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/index.html) - For managing Android UI lifecycle
+* [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/index.html) - For managing Android UI lifecycle and data persistence.
 * [Android Paging Library](https://developer.android.com/topic/libraries/architecture/paging.html) - For continuous scrolling and paging of network requests
 * [RxJava](https://github.com/ReactiveX/RxJava) - Reactive Extensions for the JVM
 * [RxKotlin](https://github.com/ReactiveX/RxKotlin) - Kotlin Extensions for RxJava
